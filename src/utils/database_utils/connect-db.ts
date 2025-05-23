@@ -18,8 +18,12 @@ const connectDataBase = async () => {
     await mongoose.connect(DB_URI);
     isConnected = true;
     console.log("Database connected successfully");
-  } catch (err: any) {
-    console.error("Database connection failed:", err.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Database connection failed:", err.message);
+    } else {
+      console.error("Database connection failed:", err);
+    }
   }
 };
 

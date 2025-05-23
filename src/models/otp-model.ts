@@ -9,7 +9,12 @@ const otpSchema = new Schema({
     type: String,
     required: true
   },
-  sentAt: {
+  role: {
+    type: String,
+    enam: ["user", "seller"],
+    requred: true
+  },
+  createdAt: {
     type: Date,
     required: true,
     default: Date.now

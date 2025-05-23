@@ -12,8 +12,12 @@ const verifyOtp = async (OTP: Number, email: String) => {
         return false;
       }
     }
-  } catch (err: any) {
-    console.log("Something happend", err.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log("Something happened:", err.message);
+    } else {
+      console.log("An unknown error occurred:", err);
+    }
   }
 };
 
