@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 
 interface Params {
   params: {
-    product_id: string,
     user_id: string
   }
 }

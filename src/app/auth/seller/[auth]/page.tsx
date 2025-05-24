@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 interface Params {
   params: {
-    auth: string
+    auth: 'login' | 'logout' | 'signin' | 'signout'
   }
 }
 

@@ -1,3 +1,5 @@
+import { userLogin, userLogout, userSignIn, userSignOut } from "@/controllers/user-controller";
+import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 interface Params {
@@ -8,7 +10,23 @@ interface Params {
 
 export async function POST(req: NextRequest, { params }: Params) {
   try {
-    // auth logic here
+    const { auth } = await params;
+    switch (auth) {
+      case "login":
+        userLogin();
+        break;
+      case "logout":
+        userLogout();
+        break;
+      case "signin":
+        userSignIn();
+        break;
+      case "signout":
+        userSignOut();
+        break;
+      default:
+        redirect("/not_found");
+    }
   } catch (err) {
     if (err instanceof Error) {
       console.log("Authentication Failed", err.message);

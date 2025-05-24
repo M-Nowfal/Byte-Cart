@@ -4,6 +4,8 @@ import { AppContext } from "@/context/AppContext";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { toast } from "sonner";
+import ProductCard from "../ui_components/ProductCard";
+import Skeloton from "../ui_components/Skeloton";
 
 const HomePage = () => {
 
@@ -37,12 +39,14 @@ const HomePage = () => {
 
   return (
     !isLoading ? (
-      <div className="container">
-        <div>Home Page</div>
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-5 pt-25">
+        {products.length > 0 && products.map((product: any) => (
+          <ProductCard key={product?._id} product={product} />
+        ))}
       </div>
     ) : (
       <div>
-        <h1>Loading...</h1>
+        <Skeloton />
       </div>
     )
   );
