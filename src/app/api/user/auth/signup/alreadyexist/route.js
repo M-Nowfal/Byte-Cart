@@ -9,6 +9,11 @@ export async function POST(req) {
         { message: "User already exist with that email" },
         { status: 401 }
       );
+    } else {
+      return NextResponse.json(
+        { message: "No user exist" },
+        { status: 200 }
+      );
     }
   } catch (err) {
     console.log(err);
@@ -18,4 +23,8 @@ export async function POST(req) {
       { error: err }
     );
   }
+}
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { status: 200 });
 }

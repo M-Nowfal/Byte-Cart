@@ -73,7 +73,7 @@ const UserSignUp = () => {
   };
 
   const sendOtp = async () => {
-    if (loginDetails.email) {
+    if (formData.email) {
       try {
         setIsLoading(true);
         const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: formData.email });
@@ -100,7 +100,7 @@ const UserSignUp = () => {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signup/alreadyexist`, { email: formData.email });
       if (res.status === 200) {
         if (await sendOtp()) {
-          sessionStorage.setItem("signupDetails", JSON.stringify(formData));
+          sessionStorage.setItem("signupData", JSON.stringify(formData));
           router.push(`/verifyotp?auth=signup&email=${formData.email}`);
         } else {
           throw new Error("Error");

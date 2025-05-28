@@ -36,7 +36,7 @@ const VerifyOtpPage = () => {
           if (res.status === 201) {
             toast.success(res.data.message);
             localStorage.setItem("byteCartUser", JSON.stringify(res.data.user));
-            setByteCartUser(res.data?.user?.name);
+            setByteCartUser(res.data?.user);
             router.push("/");
           }
         }
@@ -47,7 +47,7 @@ const VerifyOtpPage = () => {
           if (res.status === 201) {
             toast.success(res?.data?.message);
             localStorage.setItem("byteCartUser", JSON.stringify(res.data.user));
-            setByteCartUser(res?.data?.user?.name);
+            setByteCartUser(res?.data?.user);
             router.push("/");
           }
         }
@@ -60,6 +60,7 @@ const VerifyOtpPage = () => {
           if (res.status === 200) {
             toast.success(res.data?.message);
             localStorage.clear();
+            setByteCartUser(null);
             router.push('/user/login');
           }
         }
