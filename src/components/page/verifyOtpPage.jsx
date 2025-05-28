@@ -83,7 +83,7 @@ const VerifyOtpPage = () => {
   };
 
   return (
-    <div className="min-h-100 flex text-black items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-150 flex text-black items-center justify-center bg-gray-50 p-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Verify Your Email</h1>
