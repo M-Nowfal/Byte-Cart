@@ -15,31 +15,42 @@ const UserSignOut = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  const sendOtp = async () => {
+    if (email) {
+      try {
+        setIsLoading(true);
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email });
+        if (res.status === 200) {
+          toast.success(res.data?.message);
+          return true;
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Failed to send otp!");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signout`,
-        {
-          data: { 
-            email,
-            phone,
-            password,
-            id: byteCartUser.id
-          },
-          headers: {
-            'Content-Type': 'application/json' 
-          }
-        }
-      );
-
+      setIsLoading(true);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signout/isexist`, { id: byteCartUser.id, email, password });
       if (res.status === 200) {
-        toast.success(res.data?.message);
-        router.push('/user/login');
+        if (await sendOtp()) {
+          sessionStorage.setItem("signoutData", JSON.stringify({ data: { email, phone, password, id: byteCartUser.id } }));
+          router.push(`/verifyotp?auth=signout&email=${email}`);
+        } else {
+          throw new Error("Error");
+        }
       }
     } catch (err) {
+      console.log(err);
       toast.error(err.response?.data?.message || 'Sign out failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -88,7 +99,7 @@ const UserSignOut = () => {
                 </div>
                 <input
                   id="phone"
-                  type="tel"
+                  type="number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="pl-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"

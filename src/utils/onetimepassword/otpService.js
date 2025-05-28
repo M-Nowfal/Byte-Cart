@@ -1,15 +1,25 @@
+import otpModel from "@/models/otpModel";
 import { mailOptions, transporter } from "./mailConfig";
-import { kv } from '@vercel/kv';
+import connectDataBase from "../database/connectDataBase";
 
-const OTP_EXPIRATION = 5 * 60;
+const OTP_EXPIRATION = 10 * 60;
 
 export const sendOtp = async (email) => {
   try {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    await kv.set(`otp:${email}`, otp, { ex: OTP_EXPIRATION });
-
     await transporter.sendMail(mailOptions(email, otp));
+    
+    await connectDataBase();
+    const alreadyHaveOtp = await otpModel.findOne({ email });
+    if (alreadyHaveOtp) {
+      await otpModel.updateOne({ email }, { 
+        $set: { otp, createdAt: Date.now() }
+      });
+    } else {
+      await otpModel.create({ email, otp });
+    }
+    
     return { success: true, message: "OTP sent successfully" };
   } catch (error) {
     console.error("OTP send error:", error);
@@ -19,17 +29,18 @@ export const sendOtp = async (email) => {
 
 export const verifyOtp = async (email, userOtp) => {
   try {
-    const storedOtp = await kv.get(`otp:${email}`);
+    await connectDataBase();
+    const storedOtp = await otpModel.findOne({ email });
 
     if (!storedOtp) {
       return { success: false, message: "No OTP found or expired" };
     }
 
-    if (userOtp !== storedOtp) {
+    if (userOtp !== storedOtp.otp) {
       return { success: false, message: "Invalid OTP" };
     }
 
-    await kv.del(`otp:${email}`);
+    await otpModel.findOneAndDelete({ email });
     return { success: true, message: "OTP verified successfully" };
   } catch (error) {
     console.error("OTP verification error:", error);

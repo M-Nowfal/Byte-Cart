@@ -5,7 +5,8 @@ import bcryptjs from "bcryptjs";
 export async function DELETE(req) {
   try {
     const body = await req.json();
-    const { email, phone, password, id } = body;
+    const { email, phone, password, id } = body.data;
+    console.log(body);
     const user = await userModel.findById(id);
     if (!user) {
       return NextResponse.json(

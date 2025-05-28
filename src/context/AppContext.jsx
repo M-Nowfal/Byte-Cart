@@ -11,8 +11,11 @@ const AppContext = ({ children }) => {
   const [byteCartUser, setByteCartUser] = useState(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("byteCartUser") || null;
-    setByteCartUser(user?.name);
+    async function getStoredUser() {
+      const user = await JSON.parse(localStorage.getItem("byteCartUser")) || null;
+      setByteCartUser(user);
+    }
+    getStoredUser();
   }, []);
 
   const contextValues = {

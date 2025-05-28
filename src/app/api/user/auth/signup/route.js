@@ -15,15 +15,19 @@ export async function POST(req) {
       const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
       const newUser = await userModel.create({ email, password: hashedPassword, firstName, lastName, phone, wishlist: [], orders: [] });
       return NextResponse.json(
-        { 
+        {
           message: `Successfully signed up to Byte-Cart`,
           user: { name: firstName, id: newUser._id }
-        }, 
+        },
         { status: 201 }
       );
     }
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ status: 500 }, { error: err });
+    return NextResponse.json(
+      { message: "Internal server error" }, 
+      { status: 500 }, 
+      { error: err }
+    );
   }
 }

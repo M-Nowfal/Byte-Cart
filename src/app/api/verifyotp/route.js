@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { email, otp } = await req.json();
-    const isValidOtp = verifyOtp(email, otp);
+    const isValidOtp = await verifyOtp(email, otp);
     if (isValidOtp.success) {
       return NextResponse.json(
         { message: isValidOtp.message },

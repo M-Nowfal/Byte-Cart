@@ -1,7 +1,7 @@
 "use client";
 
 import { Eye, EyeClosed, Lock, Mail } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { context } from "@/context/AppContext";
@@ -10,13 +10,20 @@ import { toast } from "sonner";
 
 const UserLogin = () => {
 
-  const { isLoading, setIsLoading, setByteCartUser } = useContext(context);
+  const { isLoading, setIsLoading } = useContext(context);
   const [loginDetails, setLoginDetails] = useState({
     email: "", password: ""
   });
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem("byteCartUser")) {
+      toast.error("Log out from the current session to login");
+      router.push("/");
+    };
+  }, []);
 
   const sendOtp = async () => {
     if (loginDetails.email) {
@@ -39,18 +46,15 @@ const UserLogin = () => {
 
   const login = async () => {
     try {
-      if (await sendOtp()) {
-        router.push(`/verifyotp?email=${loginDetails.email}`);
-      } else {
-        throw new Error("Error");
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/login`, { loginDetails });
+      if (res.status === 201) {
+        if (await sendOtp()) {
+          sessionStorage.setItem("loginData", JSON.stringify(loginDetails));
+          router.push(`/verifyotp?auth=login&email=${loginDetails.email}`);
+        } else {
+          throw new Error("Error");
+        }
       }
-      // const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/login`, { loginDetails });
-      // if (res.status === 201) {
-      //   toast.success(res.data.message);
-      //   localStorage.setItem("byteCartUser", res.data.user);
-      //   setByteCartUser(res.data.user);
-      //   router.push("/");
-      // }
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");
     }

@@ -12,11 +12,12 @@ const VerifyOtpPage = () => {
     inp1: "", inp2: "", inp3: "", inp4: "", inp5: "", inp6: ""
   });
   const otpInputs = ["inp1", "inp2", "inp3", "inp4", "inp5", "inp6"];
-  const { isLoading, setIsLoading } = useContext(context);
+  const { isLoading, setIsLoading, setByteCartUser } = useContext(context);
   const [timer, setTimer] = useState(59);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  const email = searchParams.get("email");
+  const auth = searchParams.get("auth");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +29,40 @@ const VerifyOtpPage = () => {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/verifyotp`, { email, otp: otpString });
       if (res.status === 200) {
         toast.success(res.data?.message);
+        // Signup
+        if (auth === "signup") {
+          const formData = await JSON.parse(sessionStorage.getItem("signupData"));
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signup`, { formData });
+          if (res.status === 201) {
+            toast.success(res.data.message);
+            localStorage.setItem("byteCartUser", JSON.stringify(res.data.user));
+            setByteCartUser(res.data?.user?.name);
+            router.push("/");
+          }
+        }
+        // Login
+        else if (auth === "login") {
+          const loginDetails = await JSON.parse(sessionStorage.getItem("loginData"));
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/login`, { loginDetails });
+          if (res.status === 201) {
+            toast.success(res?.data?.message);
+            localStorage.setItem("byteCartUser", JSON.stringify(res.data.user));
+            setByteCartUser(res?.data?.user?.name);
+            router.push("/");
+          }
+        }
+        // Signout
+        else if (auth === "signout") {
+          const data = await JSON.parse(sessionStorage.getItem("signoutData"));
+          const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signout`, {
+            data, headers: { 'Content-Type': 'application/json' }
+          });
+          if (res.status === 200) {
+            toast.success(res.data?.message);
+            localStorage.clear();
+            router.push('/user/login');
+          }
+        }
       } else {
         toast.error(res.data?.message);
       }
@@ -35,6 +70,7 @@ const VerifyOtpPage = () => {
       toast.error(err.response?.data?.message || 'Verification failed. Please try again.');
     } finally {
       setIsLoading(false);
+      sessionStorage.clear();
     }
   };
 

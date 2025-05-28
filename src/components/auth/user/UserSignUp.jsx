@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import { context } from '@/context/AppContext';
 import { toast } from 'sonner';
 
 const UserSignUp = () => {
-  const { isLoading, setIsLoading, setByteCartUser } = useContext(context);
+  const { isLoading, setIsLoading } = useContext(context);
   const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,6 +20,13 @@ const UserSignUp = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("byteCartUser")) {
+      toast.error("Log out from the current session to signup");
+      router.push("/");
+    };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,20 +72,40 @@ const UserSignUp = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const sendOtp = async () => {
+    if (loginDetails.email) {
+      try {
+        setIsLoading(true);
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: formData.email });
+        if (res.status === 200) {
+          toast.success(res.data?.message);
+          return true;
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Failed to send otp!");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsLoading(true);
     try {
-      router.push(`/verifyotp?email=${formData.email}`);
-      // const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signup`, { formData });
-      // if (res.status === 201) {
-      //   toast.success(res.data.message);
-      //   localStorage.setItem("byteCartUser", res.data.user);
-      //   setByteCartUser(res.data.user);
-      //   router.push("/");
-      // }
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/signup/alreadyexist`, { email: formData.email });
+      if (res.status === 200) {
+        if (await sendOtp()) {
+          sessionStorage.setItem("signupDetails", JSON.stringify(formData));
+          router.push(`/verifyotp?auth=signup&email=${formData.email}`);
+        } else {
+          throw new Error("Error");
+        }
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || err.message || "Something went wrong!");
       console.log(err);
