@@ -1,8 +1,8 @@
 import PrivacyPolicyPage from "@/components/page/PrivacyPolicyPage";
 
 export const metadata = {
-  title: "Byte-Cart Terms of Service",
-  description: "Byte Cart Terms of service"
+  title: "Byte-Cart Privacy Policy",
+  description: "Byte Cart Privacy Policy page"
 };
 
 export default function PrivacyPage() {

@@ -1,8 +1,8 @@
 
 const Loader = () => {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <span className="loading loading-spinner text-success w-15 h-15"></span>
+    <div className="flex justify-center items-center">
+      <span className="loading loading-spinner w-4 h-4"></span>
     </div>
   );
 }

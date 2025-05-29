@@ -9,6 +9,7 @@ const AppContext = ({ children }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [byteCartUser, setByteCartUser] = useState(null);
+  const [noOfCartItems ,setNoOfCartItems] = useState(0);
 
   useEffect(() => {
     async function getStoredUser() {
@@ -21,7 +22,8 @@ const AppContext = ({ children }) => {
   const contextValues = {
     isDarkTheme, setIsDarkTheme,
     isLoading, setIsLoading,
-    byteCartUser, setByteCartUser
+    byteCartUser, setByteCartUser,
+    noOfCartItems, setNoOfCartItems
   };
 
   return (

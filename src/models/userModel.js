@@ -24,7 +24,6 @@ const userSchema = new Schema({
   },
 
   // Shopping Data
-  cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
 

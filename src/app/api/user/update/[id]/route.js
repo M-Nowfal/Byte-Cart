@@ -16,9 +16,15 @@ export async function PUT(req, { params }) {
       }
     });
 
-    return NextResponse.json({ message: "User details updated successfully" }, { status: 200 });
+    return NextResponse.json(
+      { message: "User details updated successfully" }, 
+      { status: 200 }
+    );
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ message: err.message }, { status: 500 } );
+    return NextResponse.json(
+      { message: err.message }, 
+      { status: 500 } 
+    );
   }
 }

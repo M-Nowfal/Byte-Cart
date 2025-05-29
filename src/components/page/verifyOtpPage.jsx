@@ -12,7 +12,7 @@ const VerifyOtpPage = () => {
     inp1: "", inp2: "", inp3: "", inp4: "", inp5: "", inp6: ""
   });
   const otpInputs = ["inp1", "inp2", "inp3", "inp4", "inp5", "inp6"];
-  const { isLoading, setIsLoading, setByteCartUser } = useContext(context);
+  const { isLoading, setIsLoading, setByteCartUser, setNoOfCartItems } = useContext(context);
   const [timer, setTimer] = useState(59);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,6 +61,7 @@ const VerifyOtpPage = () => {
             toast.success(res.data?.message);
             localStorage.clear();
             setByteCartUser(null);
+            setNoOfCartItems(0);
             router.push('/user/login');
           }
         }

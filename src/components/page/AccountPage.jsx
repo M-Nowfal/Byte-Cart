@@ -157,8 +157,25 @@ const AccountPage = ({ id }) => {
               <div className="ms-auto mt-3">
                 <button
                   className="btn btn-primary shadow-lg shadow-gray-400"
-                  onClick={() => router.push("/user/logout")}
-                >Log Out</button>
+                ><label htmlFor="my_modal_6" className="cursor-pointer">Log Out</label></button>
+              </div>
+            </div>
+
+            <div>
+              <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+              <div className="modal" role="dialog">
+                <div className="modal-box">
+                  <h3 className="text-lg font-bold">Logout Alert</h3>
+                  <p className="pt-4">Are you sure to logout from Byte-cart</p>
+                  <div className="flex justify-end gap-7">
+                    <div className="modal-action">
+                      <label htmlFor="my_modal_6" className="btn text-green-600">Cancel</label>
+                    </div>
+                    <div className="modal-action">
+                      <label htmlFor="my_modal_6" className="btn text-red-600" onClick={() => router.push("/user/logout")}>OK</label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

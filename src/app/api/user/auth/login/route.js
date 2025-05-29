@@ -19,13 +19,22 @@ export async function POST(req) {
           { status: 201 }
         );
       } else {
-        return NextResponse.json({ message: "Incorrect password" }, { status: 401 });
+        return NextResponse.json(
+          { message: "Incorrect password" }, 
+          { status: 401 }
+        );
       }
     } else {
-      return NextResponse.json({ message: "user not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "user not found" }, 
+        { status: 404 }
+      );
     }
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ status: 500 }, { error: err.message });
+    return NextResponse.json(
+      { status: 500 }, 
+      { error: err.message }
+    );
   }
 }

@@ -1,16 +1,44 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Star, ShoppingCart, Heart, Share2, PlusSquareIcon, MinusSquareIcon } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Star, ShoppingCart, Share2, PlusSquareIcon, MinusSquareIcon } from "lucide-react";
+import { useContext, useState } from "react";
 import LikeButton from "../ui/LikeButton";
 import { toast } from "sonner";
+import { context } from "@/context/AppContext";
+import axios from "axios";
+import Loader from "../ui/Loader";
 
 const ProductPage = ({ product }) => {
+  const { byteCartUser, setNoOfCartItems } = useContext(context);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [loading, setIsLoading] = useState(false);
 
   const images = product?.images || [];
   const ratingStars = Array(5).fill(0);
+
+  const addToCart = async () => {
+    try {
+      setIsLoading(true);
+      if (!byteCartUser) {
+        toast.error("You need to create an account or Login");
+        return;
+      } else {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/addtocart/${byteCartUser.id}`, {
+          productid: product._id, quantity, amount: quantity * product.price
+        });
+        if (res.status === 201) {
+          toast.success(res.data.message);
+          setNoOfCartItems(prev => prev + quantity);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Failed to add product");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev >= images.length - 1 ? 0 : prev + 1));
@@ -142,9 +170,9 @@ const ProductPage = ({ product }) => {
               </div>}
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer">
+                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={addToCart} disabled={product.stock <= 0 || loading}>
                   <ShoppingCart className="w-5 h-5" />
-                  Add to Cart
+                  {loading ? <Loader /> : "Add to Cart"}
                 </button>
                 <button className="flex-1 border border-primary text-primary hover:bg-primary/10 py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer">
                   <Share2 className="w-5 h-5" />

@@ -2,12 +2,11 @@
 
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { context } from '@/context/AppContext';
 
 const UserLogout = () => {
-  const { setByteCartUser } = useContext(context);
+  const { byteCartUser, setByteCartUser, setNoOfCartItems } = useContext(context);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,6 +15,7 @@ const UserLogout = () => {
         setTimeout(() => {
           localStorage.clear();
           setByteCartUser(null);
+          setNoOfCartItems(0);
           router.push("/");
         }, 2000);
       } catch (error) {
@@ -24,13 +24,18 @@ const UserLogout = () => {
       }
     };
 
-    logoutUser();
+    if (!byteCartUser) {
+      toast.error("First login");
+      router.push("/user/login");
+    } else {
+      logoutUser();
+    }
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="flex flex-col items-center p-8 bg-white rounded-lg shadow-md">
-        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+    <div className="flex flex-col items-center justify-center min-h-150 bg-whiite">
+      <div className="flex flex-col items-center p-8 bg-white rounded-lg shadow-md shadow-gray-400">
+        <span className="loading loading-spinner w-12 h-12 bg-primary"></span>
         <h1 className="mt-4 text-xl font-semibold text-gray-800">Logging out...</h1>
         <p className="mt-2 text-gray-600">Please wait while we sign you out</p>
       </div>

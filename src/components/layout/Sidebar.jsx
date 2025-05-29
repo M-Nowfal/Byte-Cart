@@ -4,6 +4,7 @@ import { context } from "@/context/AppContext";
 import { CircleX, ShoppingCart, ShoppingBag, Smartphone, Laptop, Shirt, Settings, HelpCircle, LogOut, User, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 const Sidebar = () => {
   const { byteCartUser } = useContext(context);
@@ -21,7 +22,7 @@ const Sidebar = () => {
         <ul className="menu bg-white min-h-full w-80 p-4 shadow-xl text-base-content border-r border-gray-200 transform transition-transform duration-300 ease-in-out -translate-x-full drawer-open:translate-x-0">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-primary">{byteCartUser?.name || "My Account"}</h2>
+            <h2 className="text-2xl font-bold text-orange-600">{byteCartUser?.name || "My Account"}</h2>
             <label htmlFor="my-drawer" className="hover:bg-gray-100 cursor-pointer">
               <CircleX className="w-6 h-6 text-gray-500 hover:text-red-500 transition-colors" />
             </label>
@@ -70,8 +71,12 @@ const Sidebar = () => {
               Cart & Orders
             </h2>
             <ul className="space-y-2">
-              <li className="hover:ps-3 duration-200">
-                <Link href={`/cart`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+              <li className="hover:ps-3 duration-200" onClick={() => {
+                if (!byteCartUser) {
+                  toast.error("Create a new account or login to view cart");
+                }
+              }}>
+                <Link href={byteCartUser ? `/user/usercart/${byteCartUser.id}` : ""} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <ShoppingCart className="w-5 h-5" />
                   Cart
                 </Link>
@@ -95,7 +100,7 @@ const Sidebar = () => {
             </h2>
             <ul className="space-y-2">
               <li className="hover:ps-3 duration-200">
-                <Link href={`/account`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <Link href={byteCartUser ? `/user/account/${byteCartUser.id}` : "/user/login"} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <User className="w-5 h-5" />
                   Your Account
                 </Link>

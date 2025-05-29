@@ -1,7 +1,31 @@
 import Link from "next/link";
 import { Star } from "lucide-react";
+import { useContext, useState } from "react";
+import { context } from "@/context/AppContext";
+import { toast } from "sonner";
+import axios from "axios";
+import Loader from "../ui/Loader";
 
 const ProductCard = ({ props }) => {
+  const { byteCartUser, setNoOfCartItems } = useContext(context);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const addToCart = async (userid) => {
+    try {
+      setIsLoading(true);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/addtocart/${userid}`, { productid: props._id, quantity: 1, amount: props.price });
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        setNoOfCartItems(prev => prev + 1);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Failed to add product to cart");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="card card-side bg-white border border-gray-400 w-[98%] sm:w-5/6">
       <Link href={`/product/${props._id}`} className="flex-shrink-0">
@@ -23,7 +47,7 @@ const ProductCard = ({ props }) => {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-sm text-gray-500">{props.category}</span>
-              <h2 className="card-title text-lg text-black">{props.name}</h2>
+              <h2 className="card-title text-lg text-black line-clamp-2">{props.name}</h2>
               <span className="text-sm font-semibold text-gray-600">{props.barand}</span>
             </div>
             <div className="badge bg-pink-900 text-white">₹{props.price.toFixed(2)}</div>
@@ -62,10 +86,19 @@ const ProductCard = ({ props }) => {
             )}
           </div>
           <button
-            className="btn btn-primary btn-sm"
-            disabled={!props.status}
+            className="btn bg-primary border-0 btn-sm w-25"
+            disabled={!props.status || props.stock <= 0}
+            onClick={() => {
+              if (!byteCartUser) {
+                toast.error("create a new account or login to add product");
+                return;
+              } else {
+                !isLoading && addToCart(byteCartUser.id);
+              }
+            }}
           >
-            {props.status ? "Add to Cart" : "Unavailable"}
+            {isLoading && <Loader />}
+            {!isLoading && (props.status && props.stock > 0 ? "Add to Cart" : "Unavailable")}
           </button>
         </div>
       </div>

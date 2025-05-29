@@ -10,10 +10,15 @@ export async function POST(req) {
     connectDataBase();
     const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
-      return NextResponse.json({ message: "User already exist with that email" }, { status: 401 });
+      return NextResponse.json(
+        { message: "User already exist with that email" }, 
+        { status: 401 }
+      );
     } else {
       const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
-      const newUser = await userModel.create({ email, password: hashedPassword, firstName, lastName, phone, wishlist: [], orders: [] });
+      const newUser = await userModel.create({ 
+        email, password: hashedPassword, firstName, lastName, phone, wishlist: [], orders: [] 
+      });
       return NextResponse.json(
         {
           message: `Successfully signed up to Byte-Cart`,
