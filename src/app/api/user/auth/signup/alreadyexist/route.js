@@ -1,9 +1,11 @@
 import userModel from "@/models/userModel";
+import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const { email } = await req.json();
+    await connectDataBase();
     if (await userModel.findOne({ email })) {
       return NextResponse.json(
         { message: "User already exist with that email" },

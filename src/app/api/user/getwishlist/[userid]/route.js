@@ -1,17 +1,18 @@
-import productModel from "@/models/productModel";
+import userModel from "@/models/userModel";
 import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(_req, { params }) {
   try {
+    const { userid } = await params;
     await connectDataBase();
-    const products = await productModel.find({});
+    const wishlists = await userModel.findById(userid).populate("wishlist");
     return NextResponse.json(
-      { products, message: "Products fetched successfully" },
+      { wishlists: wishlists?.wishlist || [], message: "wishlist fetched successfully" }, 
       { status: 200 }
     );
   } catch (err) {
-    console.log("Error while fetching products");
+    console.log(err);
     return NextResponse.json(
       { message: "Internal server error", error: err.message },
       { status: 500 }

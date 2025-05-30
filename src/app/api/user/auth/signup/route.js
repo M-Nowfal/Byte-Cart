@@ -7,7 +7,7 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { firstName, lastName, email, phone, password } = body.formData;
-    connectDataBase();
+    await connectDataBase();
     const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
       return NextResponse.json(

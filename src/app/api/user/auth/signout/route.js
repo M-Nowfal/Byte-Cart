@@ -2,12 +2,13 @@ import userModel from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import cartModel from "@/models/cartModel";
+import connectDataBase from "@/utils/database/connectDataBase";
 
 export async function DELETE(req) {
   try {
     const body = await req.json();
     const { email, phone, password, id } = body.data;
-    console.log(body);
+    await connectDataBase();
     const user = await userModel.findById(id);
     if (!user) {
       return NextResponse.json(

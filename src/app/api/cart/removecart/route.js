@@ -1,9 +1,11 @@
 import cartModel from "@/models/cartModel";
+import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req) {
   try {
     const { id, cartId } = await req.json();
+    await connectDataBase();
     await cartModel.findByIdAndUpdate(cartId, {
       $pull: {
         cartItems: { _id: id }

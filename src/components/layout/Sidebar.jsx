@@ -1,7 +1,7 @@
 "use client";
 
 import { context } from "@/context/AppContext";
-import { CircleX, ShoppingCart, ShoppingBag, Smartphone, Laptop, Shirt, Settings, HelpCircle, LogOut, User, LogIn } from "lucide-react";
+import { CircleX, ShoppingCart, ShoppingBag, Smartphone, Laptop, Shirt, Settings, HelpCircle, LogOut, User, LogIn, List } from "lucide-react";
 import Link from "next/link";
 import { useContext } from "react";
 import { toast } from "sonner";
@@ -87,6 +87,12 @@ const Sidebar = () => {
                   Orders
                 </Link>
               </li>
+              <li className="hover:ps-3 duration-200">
+                <Link href={byteCartUser ? `/user/wishlist` : ""} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                  <List className="w-5 h-5" />
+                  Wishlist
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -106,7 +112,7 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="hover:ps-3 duration-200">
-                <Link href={`/help`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <Link href={`/customerservice`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <HelpCircle className="w-5 h-5" />
                   Customer Service
                 </Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Star, ShoppingCart, Share2, PlusSquareIcon, MinusSquareIcon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LikeButton from "../ui/LikeButton";
 import { toast } from "sonner";
 import { context } from "@/context/AppContext";
@@ -13,9 +13,24 @@ const ProductPage = ({ product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [loading, setIsLoading] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const images = product?.images || [];
   const ratingStars = Array(5).fill(0);
+
+  useEffect(() => {
+    const isLikedProduct = async () => {
+      const user = await JSON.parse(localStorage.getItem("byteCartUser"));
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/wishlist/${user.id || "unknown"}/${product._id}`);
+        if (res.status === 200)
+          setIsLiked(res.data.liked);
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Something went wrong");
+      }
+    };
+    isLikedProduct();
+  }, []);
 
   const addToCart = async () => {
     try {
@@ -33,10 +48,36 @@ const ProductPage = ({ product }) => {
         }
       }
     } catch (err) {
-      console.log(err);
       toast.error(err.response?.data?.message || "Failed to add product");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const addToWishList = async () => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/product/addtowishlist`, {
+        userid: byteCartUser?.id, productid: product._id
+      });
+      if (res.status === 200) {
+        toast.success(res.data?.message);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add product");
+    }
+  };
+
+  const removeFromWishList = async () => {
+    try {
+      const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/product/addtowishlist`, {
+        data: { userid: byteCartUser?.id, productid: product._id },
+        headers: { "Content-Type": "application/json" }
+      });
+      if (res.status === 200) {
+        toast.success(res.data?.message);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add product");
     }
   };
 
@@ -49,7 +90,6 @@ const ProductPage = ({ product }) => {
       })
         .catch((err) => {
           toast.error("Failed to share product");
-          console.log(err);
         })
     } else {
       toast.error("Share is not possible in this browser");
@@ -122,7 +162,17 @@ const ProductPage = ({ product }) => {
                 <h1 className="text-3xl font-bold text-gray-900 mt-1">{product.name}</h1>
                 <span className="text-sm text-gray-500">Brand: {product.barand}</span>
               </div>
-              <LikeButton />
+              <LikeButton
+                className={`${isLiked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
+                onClick={() => {
+                  if (!isLiked) {
+                    byteCartUser && addToWishList();
+                    setIsLiked(true);
+                  } else {
+                    byteCartUser && removeFromWishList();
+                    setIsLiked(false);
+                  }
+                }} />
             </div>
 
             {/* Rating */}

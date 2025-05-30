@@ -8,7 +8,7 @@ export async function PUT(req, { params }) {
     const { id } = await params;
     const { firstName, lastName, email, phone, address } = body.userData;
 
-    connectDataBase();
+    await connectDataBase();
 
     await userModel.findByIdAndUpdate(id, {
       $set: {

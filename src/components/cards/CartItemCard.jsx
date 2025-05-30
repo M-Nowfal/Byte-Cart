@@ -54,12 +54,12 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
     <div className="flex flex-row border-gray-400 mx-3 border-b sm:border sm:m-5 rounded-3xl">
       <Link
         href={`/product/${cartItem._id}`}
-        className="block relative sm:w-48 md:w-56 h-full flex-shrink-0 rounded-3xl"
+        className="block relative sm:w-38 md:w-56 h-full flex-shrink-0 rounded-3xl"
       >
         <img
           src={cartItem.images[0]}
           alt={cartItem.name}
-          className="w-50 h-50 object-contain object-center p-4 transition-transform duration-300 group-hover:scale-105 border-r border-gray-300 mt-5"
+          className="w-30 sm:w-50 object-contain pr-2 object-center transition-transform duration-300 group-hover:scale-105 border-r border-gray-300 mt-5"
         />
       </Link>
 
@@ -73,6 +73,9 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
               {cartItem.name}
             </h2>
             <span className="text-sm text-gray-600">{cartItem.brand}</span>
+            <span className="font-semibold text-gray-700 mt-1 line-clamp-2">
+              ₹{cartItem.price}
+            </span>
           </div>
 
         </div>
@@ -120,8 +123,8 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
               >
                 {quantity > 1 ? <Minus size={16} className="text-gray-600" /> : <Trash2 size={16} className="text-gray-600" />}
               </button>
-              <span className="px-4 py-1 text-gray-900 font-medium w-10 text-center">
-                {loading ? <Loader /> : quantity}
+              <span className="px-4 text-gray-900 font-medium w-10 h-8 flex items-center">
+                {loading ? <span className="loading loading-spinner w-4 h-4 text-primary"></span> : quantity}
               </span>
               <button
                 onClick={() => {
@@ -143,21 +146,18 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
                 <Plus size={16} className="text-gray-600" />
               </button>
             </div>
+            {quantity > 1 && <button
+              className={`text-gray-400 hover:text-red-500 transition-colors cursor-pointer m-auto`}
+              onClick={removeCartItem}
+            >
+              <Trash2 className="size-6" />
+            </button>}
           </div>
 
-          {quantity > 1 && <button
-            className={`text-gray-400 hover:text-red-500 transition-colors cursor-pointer ms-auto`}
-            onClick={removeCartItem}
-          >
-            <Trash2 className="size-6" />
-          </button>}
         </div>
         <div className="mt-5 ps-7">
           <span className="text-xl font-bold text-gray-900">
             ₹{(cartItem.price * quantity)}
-          </span>
-          <span className="line-through ps-3 text-gray-500">
-            ₹{cartItem.price}
           </span>
         </div>
       </div>

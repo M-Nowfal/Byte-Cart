@@ -1,9 +1,11 @@
 import cartModel from "@/models/cartModel";
+import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
 export async function GET(_req, { params }) {
   try {
     const { userid } = await params;
+    await connectDataBase();
     const cart = await cartModel.findOne({ userid });
     if (!cart) {
       return NextResponse.json(

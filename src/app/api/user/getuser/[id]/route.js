@@ -1,9 +1,11 @@
 import userModel from "@/models/userModel";
+import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
 export async function GET(_req, { params }) {
   try {
     const { id } = await params;
+    await connectDataBase();
     const user = await userModel.findById(id, {
       _id: 0, orders: 0, password: 0, wishlist: 0, __v: 0, isActive: 0, isVerified: 0, createdAt: 0, updatedAt: 0
     });

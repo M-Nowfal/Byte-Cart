@@ -17,7 +17,7 @@ const HomePage = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/product`);
-      setProducts(res?.data);
+      setProducts(res?.data?.products);
     } catch (err) {
       toast.error("Something went wrong");
       console.log(err);
