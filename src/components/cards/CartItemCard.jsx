@@ -15,10 +15,7 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
   const updayeCartItem = async (state) => {
     try {
       setLoading(true);
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/updatecart/${cartId}/${id}/${state}`);
-      if (res.status === 200) {
-        toast.success(res.data.message);
-      }
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/updatecart/${cartId}/${id}/${state}`);
     } catch (err) {
       console.log(err);
       toast.error(err.response?.data?.message || "Failed to update");
@@ -150,10 +147,7 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
 
           {quantity > 1 && <button
             className={`text-gray-400 hover:text-red-500 transition-colors cursor-pointer ms-auto`}
-            onClick={() => {
-              toast.warning("Remove item from cart?");
-              removeCartItem();
-            }}
+            onClick={removeCartItem}
           >
             <Trash2 className="size-6" />
           </button>}

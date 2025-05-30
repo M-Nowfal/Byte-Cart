@@ -10,6 +10,7 @@ import ProductCard from "../cards/ProductCard";
 const HomePage = () => {
 
   const { isLoading, setIsLoading } = useContext(context);
+  const [isRequestSend, setIsRequestSend] = useState(false);
   const [products, setProducts] = useState([]);
 
   const getProducts = async () => {
@@ -33,7 +34,12 @@ const HomePage = () => {
     !isLoading ? (
       <div className="flex flex-col items-center gap-5 mt-5">
         {products?.map(product => (
-          <ProductCard key={product._id} props={product} />
+          <ProductCard 
+            key={product._id} 
+            props={product} 
+            isRequestSend={isRequestSend}
+            setIsRequestSend={setIsRequestSend}
+          />
         ))}
       </div>
     ) : (

@@ -15,6 +15,12 @@ export async function DELETE(req) {
         { status: 404 }
       );
     } else {
+      if (email !== user.email || phone !== user.phone) {
+        return NextResponse.json(
+          { mesage: "Invalid email or phone" },
+          { status: 401 }
+        );
+      }
       if (await bcryptjs.compare(password, user.password)) {
         await userModel.findByIdAndDelete(id);
         await cartModel.findOneAndDelete({ userid: id });
