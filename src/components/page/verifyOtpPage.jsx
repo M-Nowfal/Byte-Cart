@@ -131,6 +131,7 @@ const VerifyOtpPage = () => {
           const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email });
           if (res.status === 200) {
             toast.success(res.data?.message);
+            setOtp({ inp1: "", inp2: "", inp3: "", inp4: "", inp5: "", inp6: "" });
             setTimer(59);
           }
         } catch (err) {
@@ -160,7 +161,9 @@ const VerifyOtpPage = () => {
                 key={key}
                 ref={(el) => (inputRef.current[key] = el)}
                 name={key}
-                type="number"
+                type="tel"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 maxLength="1"
                 value={otp[key]}
                 onChange={(e) => handleChange(key, e.target.value)}

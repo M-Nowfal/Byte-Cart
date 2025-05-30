@@ -29,7 +29,7 @@ const ProductCard = ({ props }) => {
   return (
     <div className="card card-side bg-white border border-gray-400 w-[98%] sm:w-5/6">
       <Link href={`/product/${props._id}`} className="flex-shrink-0">
-        <figure className="relative w-40 md:w-80 h-full bg-white border-r-2 border-gray-300">
+        <figure className="relative w-30 md:w-80 h-full bg-white border-r-2 border-gray-300">
           <img
             src={props.images[0]}
             alt={props.tags?.[0] || props.name}

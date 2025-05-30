@@ -58,8 +58,8 @@ const UserSignOut = () => {
   };
 
   return (
-    <div className="flex items-center justify-center text-black bg-gray-50 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex items-center min-h-150 justify-center text-black bg-white p-4">
+      <div className="bg-white p-8 rounded-lg shadow-md shadow-gray-400 w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">ByteCart Secure Sign Out</h1>
           <p className="text-gray-600 mt-2">

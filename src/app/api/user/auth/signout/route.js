@@ -1,6 +1,7 @@
 import userModel from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
+import cartModel from "@/models/cartModel";
 
 export async function DELETE(req) {
   try {
@@ -16,6 +17,7 @@ export async function DELETE(req) {
     } else {
       if (await bcryptjs.compare(password, user.password)) {
         await userModel.findByIdAndDelete(id);
+        await cartModel.findOneAndDelete({ userid: id });
         return NextResponse.json(
           { message: "Successfully Signed out" },
           { status: 200 }
