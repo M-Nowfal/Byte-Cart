@@ -19,13 +19,24 @@ const VerifyOtpPage = () => {
   const email = searchParams.get("email");
   const auth = searchParams.get("auth");
 
+  async function getCart(id) {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/getcart/${id}`);
+      if (res.status === 200) {
+        setNoOfCartItems(res.data?.cartItems?.cartItems?.reduce((acc, item) => acc + item.quantity, 0));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     const otpString = Object.values(otp).join("");
 
     try {
+      setIsLoading(true);
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/verifyotp`, { email, otp: otpString });
       if (res.status === 200) {
         toast.success(res.data?.message);
@@ -48,6 +59,7 @@ const VerifyOtpPage = () => {
             toast.success(res?.data?.message);
             localStorage.setItem("byteCartUser", JSON.stringify(res.data.user));
             setByteCartUser(res?.data?.user);
+            await getCart(res?.data?.user?.id);
             router.push("/");
           }
         }
@@ -114,15 +126,26 @@ const VerifyOtpPage = () => {
 
   const handleResendOtp = async () => {
     try {
-      setTimer(59);
+      if (email) {
+        try {
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email });
+          if (res.status === 200) {
+            toast.success(res.data?.message);
+            setTimer(59);
+          }
+        } catch (err) {
+          console.log(err);
+          toast.error(err.response?.data?.message || "Failed to resend otp!");
+        }
+      }
     } catch (err) {
       toast.error('Failed to resend OTP');
     }
   };
 
   return (
-    <div className="min-h-150 flex text-black items-center justify-center bg-gray-50 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-175 flex text-black items-center justify-center bg-white p-4">
+      <div className="bg-white p-8 rounded-lg shadow-md shadow-gray-400 w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Verify Your Email</h1>
           <p className="text-gray-600 mt-2">
@@ -137,7 +160,7 @@ const VerifyOtpPage = () => {
                 key={key}
                 ref={(el) => (inputRef.current[key] = el)}
                 name={key}
-                type="text"
+                type="number"
                 maxLength="1"
                 value={otp[key]}
                 onChange={(e) => handleChange(key, e.target.value)}

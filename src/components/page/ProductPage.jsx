@@ -40,6 +40,22 @@ const ProductPage = ({ product }) => {
     }
   };
 
+  const shareProduct = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        text: "Check out this product",
+        url: `/product/${product._id}`
+      })
+        .catch((err) => {
+          toast.error("Failed to share product");
+          console.log(err);
+        })
+    } else {
+      toast.error("Share is not possible in this browser");
+    }
+  };
+
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev >= images.length - 1 ? 0 : prev + 1));
   };
@@ -174,7 +190,7 @@ const ProductPage = ({ product }) => {
                   <ShoppingCart className="w-5 h-5" />
                   {loading ? <Loader /> : "Add to Cart"}
                 </button>
-                <button className="flex-1 border border-primary text-primary hover:bg-primary/10 py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer">
+                <button className="flex-1 border border-primary text-primary hover:bg-primary/10 py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer" onClick={shareProduct}>
                   <Share2 className="w-5 h-5" />
                   Share
                 </button>

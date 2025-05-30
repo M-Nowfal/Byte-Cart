@@ -86,7 +86,7 @@ const ProductCard = ({ props }) => {
             )}
           </div>
           <button
-            className="btn bg-primary border-0 btn-sm w-25"
+            className="btn bg-primary text-white border-0 btn-sm w-25 disabled:opacity-75"
             disabled={!props.status || props.stock <= 0}
             onClick={() => {
               if (!byteCartUser) {
