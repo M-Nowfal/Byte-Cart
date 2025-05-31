@@ -9,7 +9,7 @@ export async function GET(_req, { params }) {
     const cart = await cartModel.findOne({ userid });
     if (!cart) {
       return NextResponse.json(
-        { message: "Empty Cart" },
+        { message: "Empty Cart", cartItems: { cartItems: [] } },
         { status: 200 }
       );
     } else {

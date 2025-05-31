@@ -20,7 +20,6 @@ const ProductCard = ({ props, isRequestSend, setIsRequestSend }) => {
         setNoOfCartItems(prev => prev + 1);
       }
     } catch (err) {
-      console.log(err);
       toast.error(err.response?.data?.message || "Failed to add product to cart");
     } finally {
       setIsLoading(false);

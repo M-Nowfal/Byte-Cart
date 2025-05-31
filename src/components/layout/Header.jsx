@@ -62,7 +62,7 @@ const Header = () => {
             {/* User Account */}
             <div className="flex items-center space-x-1 cursor-pointer group">
               <User className="h-6 w-6 text-gray-200 group-hover:text-amber-600" />
-              <Link href={byteCartUser ? `/user/account/${byteCartUser?.id}` : `/user/login`}>
+              <Link href={byteCartUser ? `/user/account/${byteCartUser?.id}` : `/user/auth/login`}>
                 <div className="text-sm">
                   <p className="font-medium text-gray-200 group-hover:text-amber-600">Hello, {byteCartUser?.name || " Sign in"}</p>
                   <p className="text-xs text-gray-300 hidden sm:block">Account</p>

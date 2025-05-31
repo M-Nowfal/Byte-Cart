@@ -106,7 +106,7 @@ const Sidebar = () => {
             </h2>
             <ul className="space-y-2">
               <li className="hover:ps-3 duration-200">
-                <Link href={byteCartUser ? `/user/account/${byteCartUser.id}` : "/user/login"} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <Link href={byteCartUser ? `/user/account/${byteCartUser.id}` : "/user/auth/login"} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <User className="w-5 h-5" />
                   Your Account
                 </Link>
@@ -118,7 +118,7 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="hover:ps-3 duration-200">
-                <Link href={byteCartUser ? `/user/signout` : `/user/login`} className={`flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 ${byteCartUser ? "text-red-500" : "text-blue-500"} transition-all`}>
+                <Link href={byteCartUser ? `/user/auth/signout` : `/user/auth/login`} className={`flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 ${byteCartUser ? "text-red-500" : "text-blue-500"} transition-all`}>
                   {byteCartUser ? <LogOut className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
                   {byteCartUser ? "Sign-Out" : "Log-In"}
                 </Link>

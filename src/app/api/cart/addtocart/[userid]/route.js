@@ -1,4 +1,5 @@
 import cartModel from "@/models/cartModel";
+import userModel from "@/models/userModel";
 import connectDataBase from "@/utils/database/connectDataBase";
 import { NextResponse } from "next/server";
 
@@ -20,14 +21,21 @@ export async function POST(req, { params }) {
         await userCart.save();
       }
     } else {
-      await cartModel.create({
-        userid, cartItems: [{
-          productid, quantity, amount
-        }]
-      });
+      if (await userModel.findById(userid)) {
+        await cartModel.create({
+          userid, cartItems: [{
+            productid, quantity, amount
+          }]
+        });
+      } else {
+        return NextResponse.json(
+          { message: "No user found try to login again" },
+          { status: 404 }
+        );
+      }
     }
     return NextResponse.json(
-      { message: "Cart updated successfully" },
+      { message: "Cart updated" },
       { status: 201 }
     );
   } catch (err) {

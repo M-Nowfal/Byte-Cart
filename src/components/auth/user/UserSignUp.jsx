@@ -123,7 +123,7 @@ const UserSignUp = () => {
           </h2>
           <p className="mt-2 text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/user/login" className="font-medium text-primary hover:text-primary-dark">
+            <Link href="/user/auth/login" className="font-medium text-primary hover:text-primary-dark">
               Sign in
             </Link>
           </p>
