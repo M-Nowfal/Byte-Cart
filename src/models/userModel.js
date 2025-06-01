@@ -16,6 +16,7 @@ const userSchema = new Schema({
   // Address
   address: {
     type: { type: String, enum: ["Home", "Work"], default: "Home" },
+    doorNo: { type: String },
     street: { type: String },
     city: { type: String },
     state: { type: String },

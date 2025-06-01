@@ -43,7 +43,7 @@ const UserWishListPage = () => {
     isLoading ? (
       <Skeleton skelotonFor="Home" />
     ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
         {wishList?.map(item => (
           <WishLiastCard 
             key={item._id} 

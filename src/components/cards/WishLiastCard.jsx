@@ -35,12 +35,12 @@ const WishLiastCard = ({ item, loading, setLoading, setWishList }) => {
     <div className="flex flex-row border-gray-400 mx-3 border-b sm:border sm:m-5 rounded-xl ">
       <Link
         href={`/product/${item._id}`}
-        className="block relative sm:w-38 md:w-56 h-full flex-shrink-0 rounded-xl"
+        className="block relative w-35 sm:w-38 md:w-56 h-full flex-shrink-0 rounded-xl"
       >
         <img
           src={item.images[0]}
           alt={item.name}
-          className="w-40 sm:w-50 object-contain pr-2 object-center transition-transform duration-300 group-hover:scale-105 border-r border-gray-300 mt-5 rounded-xl"
+          className="w-35 sm:w-50 object-contain pr-2 object-center transition-transform duration-300 group-hover:scale-105 border-r border-gray-300 mt-5 rounded-xl"
         />
       </Link>
       <div className="flex-1 p-4 sm:p-6 flex flex-col">
@@ -59,7 +59,7 @@ const WishLiastCard = ({ item, loading, setLoading, setWishList }) => {
             </span>
           </div>
         </div>
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-start gap-3 mt-2">
           <Link href={`/product/${item._id}`}><button className="btn btn-warning w-25 btn-sm">View Product</button></Link>
           <button className="btn btn-primary w-15 btn-sm" onClick={removeFromWishList} >
             {isRemoved ? <Loader /> : "Remove"}

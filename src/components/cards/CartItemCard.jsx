@@ -134,8 +134,8 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
                     setTotal(prev => prev + cartItem.price);
                     setNoOfCartItems(prev => prev + 1);
                   } else {
-                    toast.error(
-                      `Maximum available stock: ${cartItem.stock}`
+                    toast.warning(
+                      `Maximum available stock ${cartItem.stock}`
                     );
                   }
                 }}

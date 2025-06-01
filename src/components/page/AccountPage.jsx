@@ -1,6 +1,6 @@
 'use client';
 import { useContext, useEffect, useState } from 'react';
-import { Edit, Mail, Phone, Home, MapPin, Lock, Check, X, User, Save } from 'lucide-react';
+import { Edit, Mail, Phone, Home, MapPin, Lock, Check, X, User, Save, DoorClosed } from 'lucide-react';
 import { context } from '@/context/AppContext';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -172,7 +172,7 @@ const AccountPage = ({ id }) => {
                       <label htmlFor="my_modal_6" className="btn text-green-600">Cancel</label>
                     </div>
                     <div className="modal-action">
-                      <label htmlFor="my_modal_6" className="btn text-red-600" onClick={() => router.push("/user/logout")}>OK</label>
+                      <label htmlFor="my_modal_6" className="btn text-red-600" onClick={() => router.push("/user/auth/logout")}>OK</label>
                     </div>
                   </div>
                 </div>
@@ -199,6 +199,7 @@ const AccountPage = ({ id }) => {
                     Address Information
                   </h2>
                   {renderField('Address Type', 'type', userData.address?.type, <Home size={18} className="text-gray-400" />, true)}
+                  {renderField('Door No', 'doorNo', userData.address?.doorNo, <DoorClosed size={18} className="text-gray-400" />, true)}
                   {renderField('Street', 'street', userData.address?.street, <MapPin size={18} className="text-gray-400" />, true)}
                   {renderField('City', 'city', userData.address?.city, <MapPin size={18} className="text-gray-400" />, true)}
                   {renderField('State', 'state', userData.address?.state, <MapPin size={18} className="text-gray-400" />, true)}

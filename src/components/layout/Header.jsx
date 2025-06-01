@@ -12,10 +12,12 @@ const Header = () => {
   useEffect(() => {
     async function getTotalCartItem() {
       try {
-        const id = (await JSON.parse(localStorage.getItem("byteCartUser"))).id;
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/getcart/${id}`);
-        if (res.status === 200) {
-          setNoOfCartItems(res.data?.cartItems?.cartItems?.reduce((acc, item) => acc + item.quantity, 0));
+        const id = (await JSON.parse(localStorage.getItem("byteCartUser")))?.id || null;
+        if (id) {
+          const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/getcart/${id}`);
+          if (res.status === 200) {
+            setNoOfCartItems(res.data?.cartItems?.cartItems?.reduce((acc, item) => acc + item.quantity, 0));
+          }
         }
       } catch (err) {
         console.log(err);

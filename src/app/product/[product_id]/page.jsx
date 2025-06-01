@@ -19,7 +19,7 @@ export default async function Product({ params }) {
   try {
     const { product_id } = await params;
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${product_id}`);
-    const product = res.data;
+    const product = res.data?.product;
     return (
       <ProductPage product={product} />
     );

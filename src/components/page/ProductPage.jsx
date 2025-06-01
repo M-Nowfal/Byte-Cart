@@ -24,10 +24,13 @@ const ProductPage = ({ product }) => {
     const isLikedProduct = async () => {
       const user = await JSON.parse(localStorage.getItem("byteCartUser"));
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/wishlist/${user.id || "unknown"}/${product._id}`);
-        if (res.status === 200)
-          setIsLiked(res.data.liked);
+        if (user) {
+          const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/wishlist/${user?.id || "unknown"}/${product._id}`);
+          if (res.status === 200)
+            setIsLiked(res.data.liked);
+        }
       } catch (err) {
+        console.log(err)
         toast.error(err.response?.data?.message || "Something went wrong");
       }
     };
