@@ -55,7 +55,7 @@ const WishLiastCard = ({ item, loading, setLoading, setWishList }) => {
             <span className="text-sm text-gray-600">{item.brand}</span>
             <span className={`text-sm ${item.stock > 0 ? "text-green-600" : "text-red-700"} line-clamp-1`}>{item.stock > 0 ? "In stock" : "Out of stock"}</span>
             <span className="font-semibold text-gray-700 mt-1 line-clamp-2">
-              ₹{item.price}
+              ₹{item.price.toLocaleString()}
             </span>
           </div>
         </div>

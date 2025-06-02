@@ -25,7 +25,7 @@ const OrderSummaryCard = ({ ordersummary, quantity = 1 }) => {
             </h2>
             <span className="text-sm text-gray-600">{ordersummary.brand}</span>
             <span className="font-semibold text-gray-700 mt-1 line-clamp-2">
-              ₹{ordersummary.price}
+              ₹{ordersummary.price.toLocaleString()}
             </span>
           </div>
         </div>
@@ -43,7 +43,7 @@ const OrderSummaryCard = ({ ordersummary, quantity = 1 }) => {
         </div>
         <div className="mt-5 ps-7">
           <span className="text-xl font-bold text-gray-900">
-            ₹{(ordersummary.price * quantity)}
+            ₹{(ordersummary.price * quantity).toLocaleString()}
           </span>
         </div>
       </div>

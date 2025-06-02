@@ -5,9 +5,8 @@ export const metadata = {
   description: "Byte Cart payment page"
 };
 
-export default async function OrderPaymentPage({ params }) {
-  const { amount } = await params;
+export default async function OrderPaymentPage() {
   return (
-    <PaymentPage amount={amount} />
+    <PaymentPage />
   );
 }

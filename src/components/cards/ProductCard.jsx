@@ -51,7 +51,7 @@ const ProductCard = ({ props, isRequestSend, setIsRequestSend }) => {
               <h2 className="card-title text-lg text-black line-clamp-2">{props.name}</h2>
               <span className="text-sm font-semibold text-gray-600">{props.barand}</span>
             </div>
-            <div className="badge bg-pink-900 text-white">₹{props.price.toFixed(2)}</div>
+            <div className="badge bg-pink-900 text-white">₹{props.price.toLocaleString()}</div>
           </div>
 
           <div className="flex items-center mt-1">

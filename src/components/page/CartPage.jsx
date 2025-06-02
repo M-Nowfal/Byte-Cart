@@ -68,7 +68,7 @@ const CartPage = ({ id }) => {
             <div className="ms-auto sm:m-auto">
               <p className="text-sm text-gray-500">Subtotal</p>
               <p className="text-2xl font-bold text-black">
-                ₹{total}
+                ₹{total.toLocaleString()}
               </p>
             </div>
             <button className="w-full sm:m-auto sm:w-48 px-6 py-3 bg-orange-600 rounded-lg transition-colors" 

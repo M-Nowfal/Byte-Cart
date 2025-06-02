@@ -157,7 +157,7 @@ const CartItemCard = ({ cartItem, setTotal, qty, id, cartId, setCart, loading, s
         </div>
         <div className="mt-5 ps-7">
           <span className="text-xl font-bold text-gray-900">
-            ₹{(cartItem.price * quantity)}
+            ₹{(cartItem.price * quantity).toLocaleString()}
           </span>
         </div>
       </div>
