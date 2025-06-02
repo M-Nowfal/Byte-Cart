@@ -74,8 +74,10 @@ const Header = () => {
 
             {/* Returns & Orders */}
             <div className="hidden md:flex flex-col cursor-pointer group ml-2">
-              <p className="text-sm font-medium text-gray-200 group-hover:text-amber-600">Returns</p>
-              <p className="text-xs text-gray-300">& Orders</p>
+              <Link href="/user/orders">
+                <p className="text-sm font-medium text-gray-200 group-hover:text-amber-600">Orders</p>
+                <p className="text-xs text-gray-300">& Returns</p>
+              </Link>
             </div>
 
             {/* Shopping Cart */}

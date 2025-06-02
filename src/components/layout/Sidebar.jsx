@@ -82,7 +82,7 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="hover:ps-3 duration-200">
-                <Link href={`/orders`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <Link href={`/user/orders`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <ShoppingBag className="w-5 h-5" />
                   Orders
                 </Link>
