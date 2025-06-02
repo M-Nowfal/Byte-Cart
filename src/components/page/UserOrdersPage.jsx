@@ -176,7 +176,7 @@ const UserOrdersPage = () => {
                         />
                       </div>
                       <div>
-                        <h3 className="text-lg font-medium text-gray-800">{item.productid?.name}</h3>
+                        <h3 className="text-lg font-medium text-gray-800 line-clamp-2">{item.productid?.name}</h3>
                       </div>
                     </div>
                     <div className="col-span-2 text-center text-gray-600">
