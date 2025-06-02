@@ -65,8 +65,7 @@ const orderSchema = new Schema({
     default: Date.now
   },
   deliveredAt: {
-    type: Date,
-    required: true
+    type: Date
   }
 });
 
