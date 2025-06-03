@@ -12,7 +12,7 @@ const VerifyOtpPage = () => {
     inp1: "", inp2: "", inp3: "", inp4: "", inp5: "", inp6: ""
   });
   const otpInputs = ["inp1", "inp2", "inp3", "inp4", "inp5", "inp6"];
-  const { isLoading, setIsLoading, setByteCartUser, setNoOfCartItems } = useContext(context);
+  const { isLoading, setIsLoading, setByteCartUser, setNoOfCartItems, setByteCartSeller } = useContext(context);
   const [timer, setTimer] = useState(59);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -75,6 +75,17 @@ const VerifyOtpPage = () => {
             setByteCartUser(null);
             setNoOfCartItems(0);
             router.push('/user/login');
+          }
+        }
+        // Seller Signup
+        else if (auth === "sellersignup") {
+          const formData = await JSON.parse(sessionStorage.getItem("signupData"));
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/signup`, formData);
+          if (res.status === 201) {
+            toast.success(res.data.message);
+            localStorage.setItem("byteCartSeller", JSON.stringify(res.data.user));
+            setByteCartSeller(res.data?.seller);
+            router.push("/");
           }
         }
       } else {
