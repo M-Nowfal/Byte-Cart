@@ -23,26 +23,8 @@ const SellerLogin = () => {
     }));
   };
 
-  // Mock API call function - replace with actual implementation
-  const loginSeller = async (credentials) => {
-    // This is where you'll implement the actual API call
-    // Return a promise that resolves with user data on success
-    // or rejects with an error on failure
-    return new Promise((resolve, reject) => {
-      // Simulate API call delay
-      setTimeout(() => {
-        if (credentials.email === 'seller@bytecart.com' && credentials.password === 'password123') {
-          resolve({
-            id: '123',
-            name: 'ByteCart Seller',
-            email: credentials.email,
-            token: 'mock-jwt-token'
-          });
-        } else {
-          reject(new Error('Invalid email or password'));
-        }
-      }, 1500);
-    });
+  const loginSeller = async () => {
+    
   };
 
   const handleSubmit = async (e) => {
@@ -56,7 +38,7 @@ const SellerLogin = () => {
       }
 
       // Call login function (replace with actual API call)
-      const user = await loginSeller(formData);
+      const user = await loginSeller();
       
       // Handle successful login
       toast.success('Login successful!');

@@ -83,6 +83,7 @@ const VerifyOtpPage = () => {
           const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/signup`, formData);
           if (res.status === 201) {
             toast.success(res.data.message);
+            localStorage.clear();
             localStorage.setItem("byteCartSeller", JSON.stringify(res.data.user));
             setByteCartSeller(res.data?.seller);
             router.push("/");
