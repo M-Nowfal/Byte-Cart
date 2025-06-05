@@ -30,7 +30,7 @@ const Sidebar = () => {
 
           {/* Shop by Category */}
           <div className="mb-6">
-            {byteCartUser && <>
+            {byteCartSeller ? "" : <>
               <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
                 Shop by Category
@@ -78,7 +78,7 @@ const Sidebar = () => {
                   toast.error("Create a new account or login to view cart");
                 }
               }}>
-                {byteCartUser && <Link href={byteCartUser ? `/user/usercart/${byteCartUser.id}` : ""} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                {byteCartSeller ? "" : <Link href={byteCartUser ? `/user/usercart/${byteCartUser.id}` : ""} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                   <ShoppingCart className="w-5 h-5" />
                   Cart
                 </Link>}

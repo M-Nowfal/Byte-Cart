@@ -89,6 +89,23 @@ const VerifyOtpPage = () => {
             router.push("/");
           }
         }
+        // Seller Login
+        else if (auth === "sellerlogin") {
+          const loginDetails = await JSON.parse(sessionStorage.getItem("loginData"));
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/login`, { email: loginDetails.email, password: loginDetails.password });
+          if (res.status === 200) {
+            toast.success(res?.data?.message);
+            localStorage.setItem("byteCartSeller", JSON.stringify(res.data.seller));
+            setByteCartUser(res?.data?.seller);
+            router.push("/seller/dashboard");
+          }
+        }
+        // Forgot Password
+        else if (auth === "forgotpassuser") {
+          router.push("/user/changepassword");
+        } else if (auth === "forgotpassseller") {
+          router.push("/seller/changepassword");
+        }
       } else {
         toast.error(res.data?.message);
       }

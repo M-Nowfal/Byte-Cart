@@ -6,12 +6,14 @@ import { context } from "@/context/AppContext";
 import axios from "axios";
 import { toast } from "sonner";
 import ProductCard from "../cards/ProductCard";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
 
-  const { isLoading, setIsLoading } = useContext(context);
+  const { isLoading, setIsLoading, byteCartSeller } = useContext(context);
   const [isRequestSend, setIsRequestSend] = useState(false);
   const [products, setProducts] = useState([]);
+  const router = useRouter();
 
   const getProducts = async () => {
     try {
@@ -27,6 +29,9 @@ const HomePage = () => {
   }
 
   useEffect(() => {
+    if (localStorage.getItem("byteCartSeller")) {
+      router.push("/seller/dashboard");
+    }
     products?.length === 0 && getProducts();
   }, []);
 

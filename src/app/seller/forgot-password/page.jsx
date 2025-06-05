@@ -1,4 +1,4 @@
-import UserForgotPass from "@/components/auth/user/UserForgotPass";
+import SellerForgotPass from "@/components/auth/seller/SellerForgotPass";
 
 export const metadata = {
   title: "Byte-Cart User ForgotPassword",
@@ -7,6 +7,6 @@ export const metadata = {
 
 export default async function UserForgotPasswordPage() {
   return (
-    <UserForgotPass />
+    <SellerForgotPass />
   );
 }

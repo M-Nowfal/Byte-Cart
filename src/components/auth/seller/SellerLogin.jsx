@@ -23,36 +23,41 @@ const SellerLogin = () => {
     }));
   };
 
-  const loginSeller = async () => {
-    
-  };
+  const sendOtp = async () => {
+    if (formData.email) {
+      try {
+        setIsLoading(true);
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: formData.email });
+        if (res.status === 200) {
+          toast.success(res.data?.message);
+          return true;
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Failed to send otp!");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Validate form
-      if (!formData.email || !formData.password) {
-        throw new Error('Please fill in all fields');
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/login`, { email: formData.email, password: formData.password });
+      if (res.status === 200) {
+        if (await sendOtp()) {
+          sessionStorage.setItem("loginData", JSON.stringify(formData));
+          router.push(`/verifyotp?auth=sellerlogin&email=${formData.email}`);
+        } else {
+          throw new Error("Failed to send OTP");
+        }
       }
-
-      // Call login function (replace with actual API call)
-      const user = await loginSeller();
-      
-      // Handle successful login
-      toast.success('Login successful!');
-      
-      // Store user data if remember me is checked
-      if (rememberMe) {
-        localStorage.setItem('sellerAuth', JSON.stringify(user));
-      }
-      
-      // Redirect to seller dashboard
-      router.push('/seller/dashboard');
-      
-    } catch (error) {
-      toast.error(error.message || 'Login failed. Please try again.');
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

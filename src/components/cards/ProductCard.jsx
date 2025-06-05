@@ -30,11 +30,11 @@ const ProductCard = ({ props, isRequestSend, setIsRequestSend }) => {
   return (
     <div className="card card-side bg-white border border-gray-400 w-[98%] sm:w-5/6">
       <Link href={`/product/${props._id}`} className="flex-shrink-0">
-        <figure className="relative w-30 md:w-80 h-full bg-white border-r-2 border-gray-300">
+        <figure className="relative w-30 md:w-80 h-full bg-white border-r-1 rounded-2xl p-2 border-gray-300">
           <img
             src={props.images[0]}
             alt={props.tags?.[0] || props.name}
-            className="w-30 md:w-full h-50 object-contain object-center"
+            className="w-30 md:w-full h-50 object-contain object-center p-2"
           />
           {!props.status && (
             <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
