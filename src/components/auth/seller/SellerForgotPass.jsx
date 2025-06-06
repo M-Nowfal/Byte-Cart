@@ -18,7 +18,7 @@ const SellerForgotPass = () => {
     if (data.email) {
       try {
         setIsLoading(true);
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: loginDetails.email });
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: data.email });
         if (res.status === 200) {
           toast.success(res.data?.message);
           return true;

@@ -1,4 +1,4 @@
-import userModel from "@/models/userModel";
+import sellerModel from "@/models/sellerModel";
 import connectDataBase from "@/utils/database/connectDataBase";
 import bcryptjs from "bcryptjs";
 import { NextResponse } from "next/server";
@@ -8,7 +8,7 @@ export async function POST(req) {
     const { userid, newPass } = await req.json();
     const newHashPass = await bcryptjs.hash(newPass, await bcryptjs.genSalt(10));
     await connectDataBase();
-    await userModel.findByIdAndUpdate(userid, {
+    await sellerModel.findByIdAndUpdate(userid, {
       password: newHashPass
     });
     return NextResponse.json(
@@ -27,10 +27,10 @@ export async function PUT(req) {
   try {
     const { userid, oldPass, newPass } = await req.json();
     await connectDataBase();
-    const user = await userModel.findById(userid);
+    const user = await sellerModel.findById(userid);
     if (await bcryptjs.compare(oldPass, user.password)) {
       const hashedNewPass = await bcryptjs.hash(newPass, await bcryptjs.genSalt(10));
-      await userModel.findByIdAndUpdate(userid, {
+      await sellerModel.findByIdAndUpdate(userid, {
         $set: { password: hashedNewPass }
       });
     } else {
