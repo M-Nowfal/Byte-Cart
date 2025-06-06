@@ -11,6 +11,8 @@ const AppContext = ({ children }) => {
   const [byteCartUser, setByteCartUser] = useState(null);
   const [byteCartSeller, setByteCartSeller] = useState(null);
   const [noOfCartItems ,setNoOfCartItems] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [filterProducts, setFilterProducts] = useState([]);
 
   useEffect(() => {
     async function getStoredUser() {
@@ -27,7 +29,9 @@ const AppContext = ({ children }) => {
     isLoading, setIsLoading,
     byteCartUser, setByteCartUser,
     noOfCartItems, setNoOfCartItems,
-    byteCartSeller, setByteCartSeller
+    byteCartSeller, setByteCartSeller,
+    products, setProducts,
+    filterProducts, setFilterProducts
   };
 
   return (

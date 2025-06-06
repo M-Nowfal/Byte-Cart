@@ -7,7 +7,25 @@ import { useContext } from "react";
 import { toast } from "sonner";
 
 const Sidebar = () => {
-  const { byteCartUser, byteCartSeller } = useContext(context);
+  const { byteCartUser, byteCartSeller, setFilterProducts, products } = useContext(context);
+
+  const shopByDepartment = (category) => {
+    switch (category) {
+      case "mobile":
+        setFilterProducts(products.filter(item => item.category === "mobile"));
+        break;
+      case "computer":
+        setFilterProducts(products.filter(item => item.category === "computer"));
+        break;
+      case "dress":
+        setFilterProducts(products.filter(item => item.category === "dress"));
+        break;
+      default:
+        setFilterProducts(products);
+        break;
+    }
+  };
+
   return (
     <div className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -36,28 +54,28 @@ const Sidebar = () => {
                 Shop by Category
               </h2>
               <ul className="space-y-2">
-                <li className="hover:ps-3 duration-200">
-                  <Link href={`/mobile`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <li className="hover:ps-3 duration-200" onClick={() => shopByDepartment("mobile")}>
+                  <Link href={``} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                     <Smartphone className="w-5 h-5" />
                     Mobile
                   </Link>
                 </li>
-                <li className="hover:ps-3 duration-200">
-                  <Link href={`/computer`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <li className="hover:ps-3 duration-200" onClick={() => shopByDepartment("computer")}>
+                  <Link href={``} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                     <Laptop className="w-5 h-5" />
                     Computer
                   </Link>
                 </li>
-                <li className="hover:ps-3 duration-200">
-                  <Link href={`/dress`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <li className="hover:ps-3 duration-200" onClick={() => shopByDepartment("dress")}>
+                  <Link href={``} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                     <Shirt className="w-5 h-5" />
                     Dress
                   </Link>
                 </li>
-                <li className="hover:ps-3 duration-200">
-                  <Link href={`/others`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                <li className="hover:ps-3 duration-200" onClick={() => shopByDepartment("others")}>
+                  <Link href={``} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
                     <ShoppingBag className="w-5 h-5" />
-                    Others
+                    All Category
                   </Link>
                 </li>
               </ul>
