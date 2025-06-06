@@ -128,6 +128,8 @@ const Header = () => {
               name="search-products"
               placeholder="Search products..."
               className="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 text-white"
+              value={search}
+              onChange={searchProduct}
             />
             <button className="absolute right-0 h-10 top-1/2 transform -translate-y-1/2 bg-amber-500 text-white p-2 rounded-r-md">
               <Search className="h-5 w-5" />
