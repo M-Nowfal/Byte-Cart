@@ -131,7 +131,7 @@ const Header = () => {
               value={search}
               onChange={searchProduct}
             />
-            <button className="absolute right-0 h-10 top-1/2 transform -translate-y-1/2 bg-amber-500 text-white p-2 rounded-r-md">
+            <button className="absolute right-0 h-10 top-1/2 transform -translate-y-1/2 bg-amber-500 text-white p-2 rounded-r-md" onClick={() => searchProduct({ target: { value: search } })}>
               <Search className="h-5 w-5" />
             </button>
           </div>
