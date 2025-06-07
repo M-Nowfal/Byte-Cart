@@ -32,7 +32,7 @@ const HomePage = () => {
     if (localStorage.getItem("byteCartSeller")) {
       router.push("/seller/dashboard");
     }
-    products?.length === 0 && getProducts();
+    getProducts();
   }, []);
 
   return (

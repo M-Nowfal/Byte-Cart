@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Star, ShoppingCart, Share2, PlusSquareIcon, MinusSquareIcon, ShoppingBag } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ShoppingCart, Share2, PlusSquareIcon, MinusSquareIcon, ShoppingBag, ThumbsUp, ThumbsDown, ChevronUpCircle, Trash2 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import LikeButton from "../ui/LikeButton";
 import { toast } from "sonner";
@@ -15,6 +15,8 @@ const ProductPage = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [reviews, setReviews] = useState(product?.reviews || []);
+  const [review, setReview] = useState("");
   const router = useRouter();
 
   const images = product?.images || [];
@@ -56,6 +58,39 @@ const ProductPage = ({ product }) => {
       toast.error(err.response?.data?.message || "Failed to add product");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const addReview = async () => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/review`, {
+        userid: byteCartUser?.id, username: byteCartUser?.name, review, productid: product._id
+      });
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        setReview("");
+        setReviews(prev => [
+          ...prev, { username: byteCartUser?.name, review, _id: res.data.id, userid: res.data.userid }
+        ]);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add review");
+    }
+  };
+
+  const deleteReview = async (reviewid) => {
+    try {
+      const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/review`, {
+        data: { reviewid, productid: product?._id },
+        headers: { "Content-Type": "application/json" }
+      });
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        setReview("");
+        setReviews(prev => prev.filter(r => r._id !== reviewid));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete review");
     }
   };
 
@@ -118,7 +153,7 @@ const ProductPage = ({ product }) => {
             <div className="relative h-96 w-full">
               <img
                 src={images[currentImageIndex]}
-                alt={product.name}
+                alt={product?.name}
                 className="w-full h-full object-contain p-4"
               />
 
@@ -160,9 +195,9 @@ const ProductPage = ({ product }) => {
           <div className="bg-white rounded-xl shadow-md p-6 h-full">
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-sm text-gray-500">{product.category}</span>
-                <h1 className="text-3xl font-bold text-gray-900 mt-1">{product.name}</h1>
-                <span className="text-sm text-gray-500">Brand: {product.barand}</span>
+                <span className="text-sm text-gray-500">{product?.category}</span>
+                <h1 className="text-3xl font-bold text-gray-900 mt-1">{product?.name}</h1>
+                <span className="text-sm text-gray-500">Brand: {product?.barand}</span>
               </div>
               <LikeButton
                 className={`${isLiked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
@@ -182,21 +217,21 @@ const ProductPage = ({ product }) => {
                 {ratingStars.map((_, idx) => (
                   <Star
                     key={idx}
-                    className={`w-5 h-5 ${idx < product.ratings ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
+                    className={`w-5 h-5 ${idx < product?.ratings ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
                   />
                 ))}
               </div>
               <span className="text-sm text-gray-500 ml-2">
-                ({product.reviews?.length || 0} reviews)
+                ({product?.reviews?.length || 0} reviews)
               </span>
             </div>
 
             <div className="mt-4">
               <span className="text-3xl font-bold text-gray-900">
-                ₹{product.price.toFixed(2)}
+                ₹{product?.price.toFixed(2)}
               </span>
-              {product.stock > 0 ? (
-                <span className="ml-2 text-sm text-green-600">In Stock ({product.stock} available)</span>
+              {product?.stock > 0 ? (
+                <span className="ml-2 text-sm text-green-600">In Stock ({product?.stock} available)</span>
               ) : (
                 <span className="ml-2 text-sm text-red-600">Out of Stock</span>
               )}
@@ -204,11 +239,11 @@ const ProductPage = ({ product }) => {
 
             <div className="mt-6">
               <h3 className="text-lg font-semibold text-gray-900">Description</h3>
-              <p className="mt-2 text-gray-600">{product.description}</p>
+              <p className="mt-2 text-gray-600">{product?.description}</p>
             </div>
 
             <div className="mt-8">
-              {product.stock > 0 && <div className="flex items-center gap-4 mb-6">
+              {product?.stock > 0 && <div className="flex items-center gap-4 mb-6">
                 <span className="text-gray-700">Quantity:</span>
                 <div className="flex items-center border rounded-md">
                   <button
@@ -234,11 +269,11 @@ const ProductPage = ({ product }) => {
               </div>}
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={addToCart} disabled={product.stock <= 0 || loading}>
+                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={addToCart} disabled={product?.stock <= 0 || loading}>
                   <ShoppingCart className="w-5 h-5" />
                   {loading ? <Loader /> : "Add to Cart"}
                 </button>
-                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={() => router.push(`/user/ordersummary/singleorder/${product._id}/${quantity}`)} disabled={product.stock <= 0}>
+                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={() => router.push(`/user/ordersummary/singleorder/${product?._id}/${quantity}`)} disabled={product?.stock <= 0}>
                   <ShoppingBag className="w-5 h-5" />
                   Buy Now
                 </button>
@@ -251,30 +286,55 @@ const ProductPage = ({ product }) => {
           </div>
         </div>
       </div>
-
-      {product.reviews?.length > 0 && (
-        <div className="mt-12 bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
-          <div className="space-y-6">
-            {product.reviews.map((review) => (
-              <div key={review._id} className="border-b pb-4">
-                <div className="flex items-center">
-                  <div className="flex">
-                    {ratingStars.map((_, idx) => (
-                      <Star
-                        key={idx}
-                        className={`w-4 h-4 ${idx < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-                      />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-sm text-gray-500">{review.userName}</span>
-                </div>
-                <p className="mt-2 text-gray-600">{review.comment}</p>
+      {reviews.length > 0 && <div className="mt-12 bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
+        <div className="space-y-6">
+          {reviews.map((review, idx) => (
+            <div key={idx} className="border-b pb-2 rounded-xl pl-3 border-gray-400">
+              <div className="flex items-center">
+                <span className="text-sm text-gray-700">@{review.username}</span>
               </div>
-            ))}
-          </div>
+              <p className="my-2 text-gray-950">{review.review}</p>
+              {byteCartUser?.id === review.userid && <div className="flex justify-end me-2" role="button" onClick={() => deleteReview(review._id)}>
+                <Trash2 className="text-gray-500 size-5 cursor-pointer" />
+              </div>}
+            </div>
+          ))}
         </div>
-      )}
+      </div>}
+      <div className="mt-8 bg-white rounded-xl shadow-md p-6">
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Write a Review</h3>
+        <div className="space-y-4 text-black">
+          <div className="relative">
+            <textarea
+              name="review"
+              placeholder="Share your experience with this product..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"
+              rows={4}
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+            <div className="absolute bottom-3 right-3 text-sm text-gray-500">
+              {review.length}/500
+            </div>
+          </div>
+
+          <button
+            onClick={addReview}
+            disabled={!review.trim() || loading}
+            className={`px-6 py-2 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${!review.trim() || loading
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-primary hover:bg-primary-dark shadow-md hover:shadow-lg'
+              }`}
+          >
+            {loading ? (
+              "Submitting..."
+            ) : (
+              "Submit Review"
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

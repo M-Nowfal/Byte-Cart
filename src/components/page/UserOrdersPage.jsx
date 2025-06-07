@@ -24,6 +24,21 @@ const UserOrdersPage = () => {
     }
   };
 
+  const cancelOrder = async (orderid) => {
+    try {
+      setIsLoading(false);
+      const res = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/user/orders/delete/${orderid}`);
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        setOrders(orders.filter(order => order._id !== orderid));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Failed to cancel order");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (byteCartUser?.id) {
       getOrders();
@@ -201,8 +216,13 @@ const UserOrdersPage = () => {
                   <li className="step step-primary">Order Placed</li>
                   <li className={`step ${isStepCompleted(1, order.orderedAt) && "step-primary"}`}>Shipped</li>
                   <li className={`step ${isStepCompleted(2, order.orderedAt) && "step-primary"}`}>Out for Delivery</li>
-                  <li className={`step ${isStepCompleted(3, order.orderedAt) && "step-primary"}`}>Delivered</li>
+                  <li className={`step`}>Delivered</li>
                 </ul>
+              </div>
+              <div className="text-center my-3">
+                <button className="btn bg-orange-500 border-0 hover:bg-orange-600"
+                  onClick={() => cancelOrder(order._id)}
+                >Cancel Order</button>
               </div>
             </div>
           ))}
