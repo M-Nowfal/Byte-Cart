@@ -17,7 +17,7 @@ export async function POST(req) {
     } else {
       const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
       const newUser = await userModel.create({ 
-        email, password: hashedPassword, firstName, lastName, phone, wishlist: [], orders: [] 
+        email, password: hashedPassword, firstName, lastName, phone: Number(phone), wishlist: [], orders: [] 
       });
       return NextResponse.json(
         {

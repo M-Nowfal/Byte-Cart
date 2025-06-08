@@ -219,10 +219,28 @@ const UserOrdersPage = () => {
                   <li className={`step`}>Delivered</li>
                 </ul>
               </div>
-              <div className="text-center my-3">
-                <button className="btn bg-orange-500 border-0 hover:bg-orange-600"
-                  onClick={() => cancelOrder(order._id)}
-                >Cancel Order</button>
+              <div className="m-3 ms-7">
+                <label htmlFor={order._id} className="btn bg-primary w-full md:w-1/6 text-white">
+                  Cancel Order
+                </label>
+              </div>
+              {/* Order cancellation Modal */}
+              <div>
+                <input type="checkbox" id={order._id} className="modal-toggle" />
+                <div className="modal" role="dialog">
+                  <div className="modal-box">
+                    <h3 className="text-lg font-bold">Order cancellation  Alert</h3>
+                    <p className="pt-4">Are you sure to Cancel this order</p>
+                    <div className="flex justify-end gap-7">
+                      <div className="modal-action">
+                        <label htmlFor={order._id} className="btn text-green-600">No</label>
+                      </div>
+                      <div className="modal-action">
+                        <label htmlFor={order._id} className="btn text-red-600" onClick={() => cancelOrder(order._id)}>Yes</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

@@ -4,7 +4,7 @@ import { context } from "@/context/AppContext";
 import axios from "axios";
 import { Menu, Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 const Header = () => {
@@ -12,7 +12,7 @@ const Header = () => {
     byteCartUser, noOfCartItems, setNoOfCartItems, products, setFilterProducts
   } = useContext(context);
 
-  const [search, setSearch] = useState("");
+  const search = useRef("");
 
   useEffect(() => {
     async function getTotalCartItem() {
@@ -32,12 +32,12 @@ const Header = () => {
   }, []);
 
   const searchProduct = (e) => {
-    setSearch(e.target.value);
-    const s = search.toLowerCase().trim();
-    if (s === "") {
+    search.current = e.target.value;
+    if (search.current === "") {
       setFilterProducts(products);
       return;
     }
+    const s = search.current.toLowerCase().trim();
     setFilterProducts(products.filter(item => (
       item.name.toLowerCase().includes(s) || item.tags.includes(s) || item.description.toLowerCase().includes(s)
     )));
@@ -69,7 +69,7 @@ const Header = () => {
                 type="text"
                 placeholder="Search products..."
                 className="w-full py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 text-white"
-                value={search}
+                value={search.current}
                 onChange={searchProduct}
               />
               <button className="absolute right-0 top-0 h-full px-4 bg-amber-500 text-white rounded-r-md hover:bg-amber-600 transition-colors cursor-pointer" onClick={() => searchProduct({ target: { value: search } })}>
