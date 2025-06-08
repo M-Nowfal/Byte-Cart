@@ -10,7 +10,7 @@ const productSchema = new Schema({
 
   // Seller details
   sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "Seller", required: true },
-  barand: { type: String, required: true },
+  brand: { type: String, required: true },
   stock: { type: Number, required: true },
 
   // Reviews

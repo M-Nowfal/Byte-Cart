@@ -11,7 +11,7 @@ export async function POST(req) {
     if (seller) {
       if (await bcryptjs.compare(password, seller.password)) {
         return NextResponse.json(
-          { message: `Welcome again ${seller.name}`, seller },
+          { message: `Welcome again ${seller.name}`, seller: { name: seller.name, id: seller._id } },
           { status: 200 }
         );
       } else {

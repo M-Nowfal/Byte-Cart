@@ -1,4 +1,4 @@
-import userModel from "@/models/userModel";
+import sellerModel from "@/models/sellerModel";
 import connectDataBase from "@/utils/database/connectDataBase";
 import bcryptjs from "bcryptjs";
 import { NextResponse } from "next/server";
@@ -7,14 +7,14 @@ export async function POST(req) {
   try {
     const { id, email, password } = await req.json();
     await connectDataBase();
-    const user = await userModel.findById(id);
-    if (user.email !== email) {
+    const seller = await sellerModel.findById(id);
+    if (seller.email !== email) {
       return NextResponse.json(
         { message: "incorrect credentials" },
         { status: 401 }
       );
     }
-    if (await bcryptjs.compare(password, user.password)) {
+    if (await bcryptjs.compare(password, seller.password)) {
       return NextResponse.json(
         { message: "everything ok" },
         { status: 200 }
@@ -28,7 +28,7 @@ export async function POST(req) {
   } catch (err) {
     console.log(err);
     return NextResponse.json(
-      { message: "Internal server error", error: err.message },
+      { message: "Internal server error", error: err },
       { status: 500 }
     );
   }

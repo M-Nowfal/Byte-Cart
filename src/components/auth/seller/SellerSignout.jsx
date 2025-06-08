@@ -1,18 +1,39 @@
 "use client";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Lock, Mail, Phone, User, Loader2, LogOut } from 'lucide-react';
+import { Lock, Mail, Phone, Loader2, LogOut } from 'lucide-react';
+import axios from 'axios';
+import { context } from '@/context/AppContext';
 
 const SellerSignout = () => {
   const router = useRouter();
+  const { byteCartSeller } = useContext(context);
   const [formData, setFormData] = useState({
-    sellerId: '',
     email: '',
     phone: '',
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  const sendOtp = async () => {
+    if (formData.email) {
+      try {
+        setIsLoading(true);
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sendotp`, { email: formData.email });
+        if (res.status === 200) {
+          toast.success(res.data?.message);
+          return true;
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(err.response?.data?.message || "Failed to send otp!");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,46 +43,25 @@ const SellerSignout = () => {
     }));
   };
 
-  // Mock verification function - replace with actual API call
-  const verifySellerIdentity = async (credentials) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Basic mock validation
-        if (credentials.email && credentials.password && 
-            credentials.phone && credentials.sellerId) {
-          resolve(true);
-        } else {
-          reject(new Error('Verification failed. Please check your details.'));
-        }
-      }, 1000);
-    });
-  };
-
   const handleSignout = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Validate form
-      if (!formData.sellerId || !formData.email || !formData.phone || !formData.password) {
+      if (!formData.email || !formData.phone || !formData.password) {
         throw new Error('Please fill in all fields');
       }
-
-      // Verify identity before logout
-      await verifySellerIdentity(formData);
-      
-      // Replace with actual API call to logout endpoint
-      // await axios.post('/api/seller/logout', formData);
-      
-      // Clear seller auth data
-      localStorage.removeItem('sellerAuth');
-      sessionStorage.removeItem('sellerAuth');
-      
-      toast.success('You have been securely signed out');
-      router.push('/seller/login');
-      
-    } catch (error) {
-      toast.error(error.message || 'Sign out failed. Please try again.');
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/signout/isexist`, { id: byteCartSeller.id, email: formData.email, password: formData.password });
+      if (res.status === 200) {
+        if (await sendOtp()) {
+          sessionStorage.setItem("signoutData", JSON.stringify({ email: formData.email, phone: formData.phone, password: formData.password, id: byteCartSeller.id }));
+          router.push(`/verifyotp?auth=sellersignout&email=${formData.email}`);
+        } else {
+          throw new Error("Error");
+        }
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Sign out failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -86,27 +86,6 @@ const SellerSignout = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSignout}>
-            <div>
-              <label htmlFor="sellerId" className="block text-sm font-medium text-gray-700">
-                Seller ID
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="sellerId"
-                  name="sellerId"
-                  type="text"
-                  required
-                  value={formData.sellerId}
-                  onChange={handleChange}
-                  className="py-2 pl-10 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
-                  placeholder="BC-SELLER-123"
-                />
-              </div>
-            </div>
-
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Registered Email

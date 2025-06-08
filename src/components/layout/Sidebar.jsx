@@ -47,7 +47,7 @@ const Sidebar = () => {
           </div>
 
           {/* Shop by Category */}
-          <div className="mb-6">
+          <div>
             {byteCartSeller ? "" : <>
               <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
@@ -82,15 +82,29 @@ const Sidebar = () => {
             </>}
           </div>
 
+          {byteCartSeller && <div>
+            <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5" />
+              Your Products
+            </h2>
+            <ul className="space-y-2">
+              <li className="hover:ps-3 duration-200">
+                <Link href={`/seller/dashboard`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                  Products
+                </Link>
+              </li>
+            </ul>
+          </div>}
+
           <div className="divider my-4"></div>
 
           {/* Cart & Orders */}
-          <div className="mb-6">
+          <div>
             <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center gap-2">
               <ShoppingCart className="w-5 h-5" />
-              Cart & Orders
+              {!byteCartSeller && "Cart &"} Orders
             </h2>
-            <ul className="space-y-2">
+            {!byteCartSeller && <ul className="space-y-2">
               <li className="hover:ps-3 duration-200" onClick={() => {
                 if (!byteCartUser) {
                   toast.error("Create a new account or login to view cart");
@@ -113,7 +127,15 @@ const Sidebar = () => {
                   Wishlist
                 </Link>
               </li>}
-            </ul>
+            </ul>}
+            {byteCartSeller && <ul>
+              <li className="hover:ps-3 duration-200">
+                <Link href={`/seller/orders`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 text-gray-700 transition-all">
+                  <ShoppingBag className="w-5 h-5" />
+                  Orders
+                </Link>
+              </li>
+            </ul>}
           </div>
 
           <div className="divider my-4"></div>
@@ -137,10 +159,16 @@ const Sidebar = () => {
                   Customer Service
                 </Link>
               </li>
+              {byteCartSeller && <li className="hover:ps-3 duration-200">
+                <Link href={`/seller/auth/logout`} className="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 transition-all">
+                  <LogOut className="w-5 h-5" />
+                  Log-Out
+                </Link>
+              </li>}
               <li className="hover:ps-3 duration-200">
-                <Link href={byteCartUser ? `/user/auth/signout` : (byteCartSeller ? `/seller/auth/signout` : "/user/auth/login")} className={`flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 ${byteCartUser ? "text-red-500" : "text-blue-500"} transition-all`}>
-                  {byteCartUser ? <LogOut className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
-                  {byteCartUser ? "Sign-Out" : "Log-In"}
+                <Link href={byteCartUser ? `/user/auth/signout` : (byteCartSeller ? `/seller/auth/signout` : "/user/auth/login")} className={`flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-100 ${byteCartUser || byteCartSeller ? "text-red-500" : "text-blue-500"} transition-all`}>
+                  {byteCartUser || byteCartSeller ? <LogOut className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                  {byteCartUser || byteCartSeller ? "Sign-Out" : "Log-In"}
                 </Link>
               </li>
             </ul>

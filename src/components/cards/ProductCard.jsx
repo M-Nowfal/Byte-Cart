@@ -49,7 +49,7 @@ const ProductCard = ({ props, isRequestSend, setIsRequestSend }) => {
             <div>
               <span className="text-sm text-gray-500">{props.category}</span>
               <h2 className="card-title text-lg text-black line-clamp-2">{props.name}</h2>
-              <span className="text-sm font-semibold text-gray-600">{props.barand}</span>
+              <span className="text-sm font-semibold text-gray-600">{props.brand}</span>
             </div>
             <div className="badge bg-pink-900 text-white">₹{props.price.toLocaleString()}</div>
           </div>
@@ -88,7 +88,7 @@ const ProductCard = ({ props, isRequestSend, setIsRequestSend }) => {
           </div>
           <button
             className="btn bg-primary text-white border-0 btn-sm w-25 disabled:opacity-75"
-            disabled={!props.status || props.stock <= 0}
+            disabled={!props.status || props.stock <= 0 || !byteCartUser}
             onClick={() => {
               if (!byteCartUser) {
                 toast.error("create a new account or login to add product");

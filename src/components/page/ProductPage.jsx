@@ -197,7 +197,7 @@ const ProductPage = ({ product }) => {
               <div>
                 <span className="text-sm text-gray-500">{product?.category}</span>
                 <h1 className="text-3xl font-bold text-gray-900 mt-1">{product?.name}</h1>
-                <span className="text-sm text-gray-500">Brand: {product?.barand}</span>
+                <span className="text-sm text-gray-500">Brand: {product?.brand}</span>
               </div>
               <LikeButton
                 className={`${isLiked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
@@ -269,11 +269,11 @@ const ProductPage = ({ product }) => {
               </div>}
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={addToCart} disabled={product?.stock <= 0 || loading}>
+                <button className="flex-1 bg-primary hover:bg-primary-dark text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={addToCart} disabled={product?.stock <= 0 || loading || !byteCartUser}>
                   <ShoppingCart className="w-5 h-5" />
                   {loading ? <Loader /> : "Add to Cart"}
                 </button>
-                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={() => router.push(`/user/ordersummary/singleorder/${product?._id}/${quantity}`)} disabled={product?.stock <= 0}>
+                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-md font-medium flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50" onClick={() => router.push(`/user/ordersummary/singleorder/${product?._id}/${quantity}`)} disabled={product?.stock <= 0 || !byteCartUser}>
                   <ShoppingBag className="w-5 h-5" />
                   Buy Now
                 </button>

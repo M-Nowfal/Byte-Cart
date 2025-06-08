@@ -84,7 +84,8 @@ const VerifyOtpPage = () => {
           if (res.status === 201) {
             toast.success(res.data.message);
             localStorage.clear();
-            localStorage.setItem("byteCartSeller", JSON.stringify(res.data.user));
+            setByteCartUser(null);
+            localStorage.setItem("byteCartSeller", JSON.stringify(res.data.seller));
             setByteCartSeller(res.data?.seller);
             router.push("/");
           }
@@ -94,10 +95,25 @@ const VerifyOtpPage = () => {
           const loginDetails = await JSON.parse(sessionStorage.getItem("loginData"));
           const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/login`, { email: loginDetails.email, password: loginDetails.password });
           if (res.status === 200) {
-            toast.success(res?.data?.message);
+            toast.success(res.data.message);
+            localStorage.clear();
+            setByteCartUser(null);
             localStorage.setItem("byteCartSeller", JSON.stringify(res.data.seller));
-            setByteCartUser(res?.data?.seller);
-            router.push("/seller/dashboard");
+            setByteCartSeller(res.data?.seller);
+            router.push("/");
+          }
+        }
+        // Seller SignOut
+        else if (auth === "sellersignout") {
+          const signoutData = await JSON.parse(sessionStorage.getItem("signoutData"));
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/seller/auth/signout`, {
+            sellerid: signoutData.id, password: signoutData.password, email: signoutData.email, phone: signoutData.phone
+          });
+          if (res.status === 200) {
+            toast.success(res.data.message);
+            localStorage.clear();
+            setByteCartSeller(null);
+            router.push("/");
           }
         }
         // Forgot Password

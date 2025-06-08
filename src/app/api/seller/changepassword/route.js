@@ -25,12 +25,12 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
-    const { userid, oldPass, newPass } = await req.json();
+    const { sellerid, oldPass, newPass } = await req.json();
     await connectDataBase();
-    const user = await sellerModel.findById(userid);
-    if (await bcryptjs.compare(oldPass, user.password)) {
+    const seller = await sellerModel.findById(sellerid);
+    if (await bcryptjs.compare(oldPass, seller.password)) {
       const hashedNewPass = await bcryptjs.hash(newPass, await bcryptjs.genSalt(10));
-      await sellerModel.findByIdAndUpdate(userid, {
+      await sellerModel.findByIdAndUpdate(sellerid, {
         $set: { password: hashedNewPass }
       });
     } else {

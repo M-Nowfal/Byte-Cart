@@ -5,6 +5,7 @@ import { Lock, Mail, Eye, EyeOff, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import axios from 'axios';
 
 const SellerLogin = () => {
   const router = useRouter();

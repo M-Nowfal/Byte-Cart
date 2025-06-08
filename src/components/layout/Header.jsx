@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const Header = () => {
   const {
-    byteCartUser, noOfCartItems, setNoOfCartItems, products, setFilterProducts
+    byteCartUser, noOfCartItems, setNoOfCartItems, products, setFilterProducts, byteCartSeller
   } = useContext(context);
 
   const search = useRef("");
@@ -83,24 +83,24 @@ const Header = () => {
             {/* User Account */}
             <div className="flex items-center space-x-1 cursor-pointer group">
               <User className="h-6 w-6 text-gray-200 group-hover:text-amber-600" />
-              <Link href={byteCartUser ? `/user/account/${byteCartUser?.id}` : `/user/auth/login`}>
+              <Link href={byteCartUser ? `/user/account/${byteCartUser?.id}` : (byteCartSeller ? `/seller/account/${byteCartSeller?.id}` :  `/user/auth/login`)}>
                 <div className="text-sm">
-                  <p className="font-medium text-gray-200 group-hover:text-amber-600">Hello, {byteCartUser?.name || " Sign in"}</p>
+                  <p className="font-medium text-gray-200 group-hover:text-amber-600">Hello, {byteCartUser?.name || byteCartSeller?.name || " Sign in"}</p>
                   <p className="text-xs text-gray-300 hidden sm:block">Account</p>
                 </div>
               </Link>
             </div>
 
             {/* Returns & Orders */}
-            <div className="hidden md:flex flex-col cursor-pointer group ml-2">
-              <Link href="/user/orders">
+            <div className={`md:flex flex-col cursor-pointer group ml-2 ${byteCartSeller ? "flex" : "hidden"}`}>
+              <Link href={byteCartUser ? `/user/orders` : (byteCartSeller ? `/seller/orders` : ``)}>
                 <p className="text-sm font-medium text-gray-200 group-hover:text-amber-600">Orders</p>
                 <p className="text-xs text-gray-300">& Returns</p>
               </Link>
             </div>
 
             {/* Shopping Cart */}
-            <Link href={byteCartUser ? `/user/usercart/${byteCartUser.id}` : ""}>
+            {!byteCartSeller && <Link href={byteCartUser ? `/user/usercart/${byteCartUser.id}` : ""}>
               <div className="relative cursor-pointer group" role="btn" onClick={() => {
                 if (!byteCartUser) {
                   toast.error("Create a new account or login to view cart");
@@ -116,7 +116,7 @@ const Header = () => {
                   Cart
                 </span>
               </div>
-            </Link>
+            </Link>}
           </div>
         </div>
 

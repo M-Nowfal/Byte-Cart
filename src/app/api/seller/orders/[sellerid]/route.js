@@ -1,5 +1,6 @@
 import orderModel from "@/models/orderModel";
 import { NextResponse } from "next/server";
+import productModel from "@/models/productModel";
 
 export async function GET(_req, { params }) {
   try {

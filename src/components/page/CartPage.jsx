@@ -71,7 +71,7 @@ const CartPage = ({ id }) => {
                 ₹{total.toLocaleString()}
               </p>
             </div>
-            <button className="w-full sm:m-auto sm:w-48 px-6 py-3 bg-orange-600 rounded-lg transition-colors" 
+            <button className="w-full sm:m-auto sm:w-48 px-6 py-3 bg-orange-600 text-white font-bold cursor-pointer rounded-lg transition-colors" 
               onClick={() => router.push(`/user/ordersummary/cartorder/${cart._id}`)}
             >
               Checkout

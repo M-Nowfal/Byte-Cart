@@ -29,9 +29,6 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    if (localStorage.getItem("byteCartSeller")) {
-      router.push("/seller/dashboard");
-    }
     getProducts();
   }, []);
 

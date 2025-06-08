@@ -1,4 +1,4 @@
-import SellerHomePage from "@/components/page/SellerHomePage";
+import SellerDashboard from "@/components/page/SellerDashboard";
 
 export const metadata = {
   title: "Byte-Cart Seller",
@@ -7,6 +7,6 @@ export const metadata = {
 
 export default function SellerPage() {
   return (
-    <SellerHomePage />
+    <SellerDashboard />
   );
 }
