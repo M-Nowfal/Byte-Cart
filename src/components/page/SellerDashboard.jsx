@@ -42,13 +42,14 @@ const SellerDashboard = () => {
 
   if (products.length === 0) {
     return (
-      <div className="min-h-150 p-8 flex justify-center items-center">
+      <div className="min-h-150 p-8 flex flex-col gap-5 justify-center items-center">
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <Package className="h-12 w-12 text-gray-400" />
           </div>
           <h2 className="text-2xl font-semibold text-gray-700">No Products Found</h2>
           <p className="text-gray-500 mt-2">You haven't added any products yet.</p>
+          <button className="btn btn-primary" onClick={() => router.push("/seller/addproduct")}>Add Product</button>
         </div>
       </div>
     );
